@@ -11,8 +11,7 @@
 </head>
 <body>
 <%
-
-	List<String> list = new ArrayList<String>();
+List<String> list = new ArrayList<String>();
 	String bidIdString = request.getParameter("bidId");
 	int bidId = Integer.valueOf(bidIdString);
 	
@@ -21,7 +20,7 @@ try {
 	Connection con = db.getConnection();
 
 	Statement stmt = con.createStatement();
-	Bids currentBid = new Bids(bidId);
+	Bid currentBid = new Bid(bidId);
 	int itemId = currentBid.itemId;
 	//Make an insert statement for the Sells table:
 	String delete = "DELETE FROM bids b WHERE b.bidId = ?";
@@ -71,10 +70,7 @@ try {
 	out.print(ex);
 	out.print("It failed to delete the , please try again!");
 }
-	
-	
-	
-	%>
+%>
 		
 <form method="get" action="loginpage.jsp">
 	<table>

@@ -10,7 +10,7 @@ import java.util.Random;
 
 import com.cs336.pkg.ApplicationDB;
 
-public class Alerts {
+public class Alert {
 	
 	public int alertId;
 	public int itemId;
@@ -19,7 +19,7 @@ public class Alerts {
 	public Date datePosted;
 	public Time timePosted;
 	
-	public Alerts(int itemId, String username, String content) {
+	public Alert(int itemId, String username, String content) {
 		// add to the database
 		//Get the database connection
 		System.out.println("making a comment");

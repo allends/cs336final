@@ -5,14 +5,14 @@ import com.cs336.pkg.ApplicationDB;
 import java.sql.*;
 import java.util.Random;
 
-public class Bids {
+public class Bid {
 	
 	public int bidId;
 	public int itemId;
 	public String bidder;
 	public float bidAmount;
 	
-	public Bids(int itemId, String bidder, float bidAmount) {
+	public Bid(int itemId, String bidder, float bidAmount) {
 		
 		//Get the database connection
 		ApplicationDB db = new ApplicationDB();	
@@ -62,7 +62,7 @@ public class Bids {
 		
 	}
 	
-	public Bids(int bidId, int itemId) {
+	public Bid(int bidId) {
 		//Get the database connection
 		ApplicationDB db = new ApplicationDB();	
 		Connection con = db.getConnection();
@@ -78,7 +78,7 @@ public class Bids {
 			
 			while (result.next()) {
 				this.bidId = bidId;
-				this.itemId = itemId;
+				this.itemId = result.getInt("itemId");
 				this.bidder = result.getString("bidder");
 				this.bidAmount = result.getFloat("bidAmount");
 			}

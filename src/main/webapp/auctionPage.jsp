@@ -8,8 +8,16 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Auction</title>
+<style>
+	.navigation-container {
+		display: flex;
+		flex-direction: column;
+		row-gap: 5px;
+	}
+</style>
 </head>
 <body>
+	<CENTER>
 <%
 
 	List<String> list = new ArrayList<String>();
@@ -49,6 +57,15 @@
 				<td><%= selectedAuction.currentBidder %>
 			</tr>
 		</table>
+		<br>
+		<h3>Make a bid</h3>
+		<form method="get" action="processBid.jsp"> 
+			<input type="text" name="itemId" hidden="true" value="<%= selectedAuction.itemId %>"></td>
+			<td>Bid Amount</td><td><input type="text" name="bidAmount"></td>
+			<input type="submit" value="Submit the bid request!">
+		</form>
+		<br>
+		<h3>Comments/Questions</h3>
 		<table>
 			<tr>
 				<th>Username </th>
@@ -74,8 +91,9 @@
 			<%
 				String content = request.getParameter("content");
 				String username = session.getAttribute("username") + "";
-				if (content != null) {
+				if (content != null && content.length() > 1) {
 					Comment addedComment = new Comment(selectedAuction.itemId, username, content);
+					request.setAttribute("content", null);
 				}
 			%>
 			<table>
@@ -86,17 +104,18 @@
 			</table>
 		</form>
 	
-<form method="get" action="loginpage.jsp">
-	<table>
-		<tr>    
-	</table>
-	<input type="submit" value="Log Out">
-</form>
-<form method="get" action="mainpage.jsp">
-	<table>
-		<tr>    
-	</table>
-	<input type="submit" value="Go Back to Home Page">
-</form>
+		<h4>Naviagtion</h4>
+		<div class="navigation-container">
+			<form method="get" action="viewNonOwnedAuctions.jsp">
+				<input type="submit" value="Back to Auctions">
+			</form>
+			<form method="get" action="mainpage.jsp">
+				<input type="submit" value="Go Back to Home Page">
+			</form>
+			<form method="get" action="logout.jsp">
+				<input type="submit" value="Log Out">
+			</form>
+		</div>
+</CENTER>
 </body>
 </html>

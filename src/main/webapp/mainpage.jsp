@@ -8,24 +8,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>cs336project</title>
+<style>
+	.navigation-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+</style>
 </head>
 <body>
-	<h1>
-		<% String welcomeStr = "Welcome to BuyMe " + session.getAttribute("username") + "!" ;
-		out.print(welcomeStr);
-		   %>
-	</h1>
-			
-	</body>
-	<body>
-		<form method="get" action="logout.jsp">
-			<table>
-				<tr>    
-			</table>
-			<input type="submit" value="Log Out">
-		</form> 
-	</body>
-	<body>
+	<CENTER>
+		<h1>
+			<% String welcomeStr = "Welcome to BuyMe " + session.getAttribute("username") + "!" ;
+			out.print(welcomeStr);
+				 %> 
+		</h1>
+	</CENTER>
 	<br>
 		&ensp;
 	Click here to view all alerts from your bids!
@@ -127,7 +125,23 @@
 				</tr> 
 			</table>
 			<input type="submit" value="Submit to View History">
-		</form>	
-	
+		</form>
+		<form method="get" action="logout.jsp">
+			<table>
+				<tr>    
+			</table>
+			<input type="submit" value="Log Out">
+		</form> 
 	</body>
+	<CENTER>
+		<h4>Naviagtion</h4>
+		<div class="navigation-container">
+			<form method="get" action="logout.jsp">
+				<table>
+					<tr>    
+				</table>
+				<input type="submit" value="Log Out">
+			</form> 
+		</div>
+	</CENTER>
 </html>

@@ -20,15 +20,16 @@ public class Auction {
 	public String currentBidder;
 	public Date closeDate;
 	public Time closeTime;
-	
-	public Auction(String sellerUsername, String itemName, float minPrice, float bidIncrement, int numSeats, String make, String model, Date closeDate, Time closeTime) {
-		
-		//Get the database connection
-		ApplicationDB db = new ApplicationDB();	
+
+	public Auction(String sellerUsername, String itemName, float minPrice, float bidIncrement, int numSeats, String make,
+			String model, Date closeDate, Time closeTime) {
+
+		// Get the database connection
+		ApplicationDB db = new ApplicationDB();
 		Connection con = db.getConnection();
 
 		try {
-			//Create a SQL statement
+			// Create a SQL statement
 			Statement stmt = con.createStatement();
 			int itemid = 1;
 			while (true) {
@@ -37,35 +38,35 @@ public class Auction {
 				itemid = itemid * randInt.nextInt(upperBound);
 				stmt = con.createStatement();
 				String str = "SELECT * FROM items i WHERE i.itemId = '" + itemid + "'";
-				//Run the query against the database.
+				// Run the query against the database.
 				ResultSet result = stmt.executeQuery(str);
 				if (result.next() == false) {
 					break;
 				}
 
 			}
-			
-			//Make an insert statement for the Sells table:
+
+			// Make an insert statement for the Sells table:
 			String insert = "INSERT INTO items(itemId,itemName,sellerUsername,make,model,numSeats,minPrice,bidIncrement,closeDate,closeTime,currentBid)"
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			
-			//Create the insert statement
+
+			// Create the insert statement
 			PreparedStatement ps = con.prepareStatement(insert);
 			ps.setInt(1, itemid);
 			ps.setString(2, itemName);
 			ps.setString(3, sellerUsername);
 			ps.setString(4, make);
 			ps.setString(5, model);
-			ps.setInt(6,numSeats);
+			ps.setInt(6, numSeats);
 			ps.setFloat(7, minPrice);
 			ps.setFloat(8, bidIncrement);
 			ps.setDate(9, closeDate);
 			ps.setTime(10, closeTime);
-			ps.setFloat(11,0);
-			
+			ps.setFloat(11, 0);
+
 			// Add the item to the database
 			ps.executeUpdate();
-			
+
 			// Set the values of this object
 			this.itemId = itemid;
 			this.sellerUsername = sellerUsername;
@@ -77,28 +78,31 @@ public class Auction {
 			this.bidIncrement = bidIncrement;
 			this.closeDate = closeDate;
 			this.closeTime = closeTime;
-			
+			this.currentBid = 0f;
+			this.currentBidder = "";
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("an error occurered");
 		}
-		
+
 	}
-	
+
 	public Auction(int itemId) {
-		//Get the database connection
-		ApplicationDB db = new ApplicationDB();	
+		// Get the database connection
+		ApplicationDB db = new ApplicationDB();
 		Connection con = db.getConnection();
 
 		try {
-			//Create a SQL statement
+			// Create a SQL statement
 			Statement stmt = con.createStatement();
-			
-			//Get the Auction with the associated itemId:
+
+			// Get the Auction with the associated itemId:
 			String str = "SELECT * FROM items i WHERE i.itemId = '" + itemId + "'";
-			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
+			// Create a Prepared SQL statement allowing you to introduce the parameters of
+			// the query
 			ResultSet result = stmt.executeQuery(str);
-			
+
 			while (result.next()) {
 				this.itemId = itemId;
 				this.sellerUsername = result.getString("sellerUsername");
@@ -111,63 +115,106 @@ public class Auction {
 				this.closeTime = result.getTime("closeTime");
 				this.currentBid = result.getFloat("currentBid");
 				this.bidIncrement = result.getFloat("bidIncrement");
-				this.currentBidder = result.getString("currentBidder");
+				this.currentBidder = result.getString("currentBidder") != null ? result.getString("currentBidder") : "";
 			}
-			
+
 		} catch (Exception e) {
 			System.out.println("an error occurered");
 		}
 	}
-	
-	// Bids cannot be deleted once created
-	public void addBid(int bidAmount) {
-		//Get the database connection
-		ApplicationDB db = new ApplicationDB();	
-		Connection con = db.getConnection();
-		
-		try {
-			String getBids = "SELECT MAX(bidAmount) FROM bids b WHERE b.itemId=" + this.itemId;
-			Statement stmt = con.createStatement();
-			
-			ResultSet result = stmt.executeQuery(getBids);
-			while (result.next()) {
-				if (result.getInt("bidAmount") < bidAmount) {
-					// update the entries
-					// add the new bid
-					System.out.println("the bid is valid");
-				} else {
-					// nothing
-				}
-			}
-			
-		} catch (Exception e) {
-			System.out.println("Error adding a big");
-		}
-	}
-	
-	public boolean isOpen() {
-		// Date today = new Date();
-		// Time now = new Time();
-		return true;
-	}
-	
-	// Return a list of bids for this Auction
-	public void getBids() {}
-	
-	// Return a list of bids for this Auction
-	public ArrayList<Comment> getComments() {
-		ArrayList<Comment> result = new ArrayList<Comment>();
-		
-		//Get the database connection
-		ApplicationDB db = new ApplicationDB();	
+
+	public String addBid(Float bidAmount, String bidder) {
+		// Get the database connection
+		ApplicationDB db = new ApplicationDB();
 		Connection con = db.getConnection();
 
 		try {
-			//Create a SQL statement
+			String highestBid = "SELECT MAX(bidAmount) as bidAmount, bidder FROM bids b WHERE b.itemId=" + this.itemId + " GROUP BY bidder";
+			Statement stmt = con.createStatement();
+
+			ResultSet result = stmt.executeQuery(highestBid);
+			while (result.next()) {
+				if (result.getInt("bidAmount") < bidAmount) {
+					// update the entries
+					// update the auction in mysql
+					System.out.println("the bid is valid");
+					this.currentBidder = bidder;
+					this.currentBid = bidAmount;
+					this.updateAuction();
+
+					Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
+					this.outBidNotifications(result.getString("bidder"));
+					return "Success!";
+				} else {
+					// nothing
+					System.out.println("the bid is not high enough");
+					return "Bid not high enough!";
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "System error, try again please!";
+		}
+		return "EBAY";
+	}
+
+	public void updateAuction() {
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement(
+				"UPDATE items SET currentBidder = ?, currentBid = ? WHERE itemId = ?");
+			ps.setString(1, this.currentBidder);
+			ps.setFloat(2, this.currentBid);
+			ps.setInt(3, this.itemId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public boolean isOpen() {
+		Date today = new Date(System.currentTimeMillis());
+		Time now = new Time(System.currentTimeMillis());
+		if (today.before(this.closeDate)) {
+			return true;
+		} else if (today.compareTo(this.closeDate) == 0 && now.before(this.closeTime)) {
+			return true;
+		}
+		return false;
+	}
+
+	public String getStatus() {
+		if (this.isOpen()) {
+			return "Open";
+		} else if (!this.isOpen() && this.currentBidder == null) {
+			return "Expired";
+		} else {
+			return "Closed";
+		}
+	}
+
+	// Return a list of bids for this Auction
+	public void getBids() {
+	}
+
+	// Return a list of bids for this Auction
+	public ArrayList<Comment> getComments() {
+		ArrayList<Comment> result = new ArrayList<Comment>();
+
+		// Get the database connection
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+
+		try {
+			// Create a SQL statement
 			Statement stmt = con.createStatement();
 			stmt = con.createStatement();
-			String str = "SELECT * FROM comments c WHERE c.itemId = '" + this.itemId + "'";
-			//Run the query against the database.
+			String str = "SELECT * FROM comments c WHERE c.itemId = '" + this.itemId
+					+ "' ORDER BY c.datePosted DESC, c.timePosted ASC";
+			// Run the query against the database.
 			ResultSet comments = stmt.executeQuery(str);
 			while (comments.next()) {
 				result.add(new Comment(comments.getInt("commentId")));
@@ -178,12 +225,17 @@ public class Auction {
 		}
 		return result;
 	}
-	
+
+	public void outBidNotifications(String userName) {
+
+	}
+
 	public void hello() {
 		System.out.println("hello");
 	}
-	
+
 	// Close the bidding
-	public void closeAuction() {}
-	
+	public void closeAuction() {
+	}
+
 }

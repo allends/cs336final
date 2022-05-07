@@ -33,7 +33,7 @@ try {
 		      "UPDATE items SET currentBidder = ?, currentBid = ? WHERE itemId = ?");
 	//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 	
-	String str = "SELECT * FROM bids b WHERE b.amountBid = (SELECT MAX(amountBid) FROM bids)";
+	String str = "SELECT * FROM bids b WHERE b.bidAmount = (SELECT MAX(bidAmount) FROM bids)";
 	//Run the query against the database.
 	ResultSet result = stmt.executeQuery(str);
 	if (result.next() == false) {
@@ -46,7 +46,7 @@ try {
 	}
 	else {
 		String currentBidder = result.getString("bidder");
-		Float amountBid = result.getFloat("amountBid");
+		Float amountBid = result.getFloat("bidAmount");
 		ps.setString(1,currentBidder);
 		ps.setFloat(2,amountBid);
 		ps.setInt(3,itemId);

@@ -8,23 +8,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+<style>
+	.navigation-container {
+		display: flex;
+		flex-direction: column;
+		row-gap: 5px;
+	}
+</style>
 </head>
 <body>
-	<body>
-		<form method="get" action="mainpage.jsp">
-			<table>
-				<tr>    
-			</table>
-			<input type="submit" value="Go Back to Home Page">
-		</form>
-		<form method="get" action="logout.jsp">
-			<table>
-				<tr>    
-			</table>
-			<input type="submit" value="Log Out">
-		</form>
-		<form name="dropdown1" method="get" action="#">
+		<CENTER>
+			<h1>Auctions</h1>
+		<form name="dropdown" method="get" action="#">
+			<select name="orderby">
+				<option value="ASC" hidden disabled selected>Ascending/descending</option>
+				<option value="ASC">Ascending</option>
+				<option value="DESC">Descending</option>
+			</select>
 			<select name="sortby">
+				<option value="itemName" hidden disabled selected>Order by...</option>
 				<option value="itemName">Name</option>
 				<option value="currentBid">Price</option>
 				<option value="closeDate">Date</option>
@@ -32,16 +34,6 @@
 			</select>
 			<input type="submit" value="Sort">
 		</form>
-		<form name="dropdown2" method="get" action="#">
-			<select name="orderby">
-				<option value="ASC">Ascending</option>
-				<option value="DESC">Descending</option>
-			</select>
-			<input type="submit" value="Sort">
-		</form>
-		
-	</body>
-	<body>
 	<p> &ensp; </p>
 	<%
 		List<String> list = new ArrayList<String>();
@@ -71,14 +63,12 @@
 			%>
 			<table>
 				<tr>
-					<td>Item ID</td>
 					<td>Item Name</td>
-					<td>Seller</td>
 					<td>Make</td>
 					<td>Model</td>
-					<td>Seats</td>
 					<td>Close Date</td>
 					<td>Close Time</td>
+					<td>Status</td>
 					<td>Current Bid</td>
 					<td>Current Bidder</td>
 					<td>Open Page</td>
@@ -88,51 +78,55 @@
 						Auction current = new Auction(result.getInt("itemId"));
 						%>
 							<tr>
-								<td><%= current.itemId %></td>
 								<td><%= current.itemName %></td>
-								<td><%= current.sellerUsername %></td>
 								<td><%= current.make %></td>
 								<td><%= current.model %></td>
-								<td><%= current.numSeats %></td>
 								<td><%= current.closeDate %></td>
 								<td><%= current.closeTime %></td>
+								<td><%= current.getStatus() %></td>
 								<td><%= current.currentBid %></td>
 								<td><%= current.currentBidder %></td>
 								<td>
 									<form method="get" action="auctionPage.jsp">
-										<input type="submit" value="View auction"></td>
+										<input type="submit" value="View auction">
 										<input type="text" name="itemId" hidden="true" value="<%= current.itemId %>">
 									</form>
+								</td>
 							</tr>
 						<%
 					}
 				%>
 			</table>
 		<%
-			//close the connection.
-			//<td><input type="submit" action="#"></td>
 			con.close();
-
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	%>
-	</body>
-	<body>
-		Please insert the Item Id and Bid amount that you want to make on an auction!
-		<br>
-			<form method="get" action="processBid.jsp">
-				<table>
-					<tr>    
-						<td>Item Id</td><td><input type="text" name="itemId"></td>
-					</tr>
-					<tr>
-						<td>Bid Amount</td><td><input type="text" name="bidAmount"></td>
-					</tr>
-				</table>
-				<input type="submit" value="Submit the bid request!">
-			</form>
-		<br>
-	</body>
-
+	<br>
+	<!-- Please insert the Item Id and Bid amount that you want to make on an auction!
+	<br>
+		<form method="get" action="processBid.jsp">
+			<table>
+				<tr>    
+					<td>Item Id</td><td><input type="text" name="itemId"></td>
+				</tr>
+				<tr>
+					<td>Bid Amount</td><td><input type="text" name="bidAmount"></td>
+				</tr>
+			</table>
+			<input type="submit" value="Submit the bid request!">
+		</form>
+	<br> -->
+	<h4>Naviagtion</h4>
+	<div class="navigation-container"> 
+		<form method="get" action="mainpage.jsp">
+			<input type="submit" value="Go Back to Home Page">
+		</form>
+		<form method="get" action="logout.jsp">
+			<input type="submit" value="Log Out">
+		</form>
+	</div>
+	</CENTER>
 </body>
 </html>

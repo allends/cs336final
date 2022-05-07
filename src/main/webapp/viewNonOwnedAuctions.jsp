@@ -9,11 +9,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 </head>
-<script>
-function redirect(int itemId) {
-	console.log(itemId);
-}
-</script>
 <body>
 	<body>
 		<form method="get" action="mainpage.jsp">
@@ -74,11 +69,6 @@ function redirect(int itemId) {
 			ResultSet result = stmt.executeQuery(str);
 			
 			%>
-			<script type="text/javascript">
-				function redirect(int itemId) {
-					console.log(itemId);
-				}
-			</script>
 			<table>
 				<tr>
 					<td>Item ID</td>
@@ -108,7 +98,11 @@ function redirect(int itemId) {
 								<td><%= current.closeTime %></td>
 								<td><%= current.currentBid %></td>
 								<td><%= current.currentBidder %></td>
-								<td><button onclick="redirect(current.itemId)">Open Auction</button></td>
+								<td>
+									<form method="get" action="auctionPage.jsp">
+										<input type="submit" value="View auction"></td>
+										<input type="text" name="itemId" hidden="true" value="<%= current.itemId %>">
+									</form>
 							</tr>
 						<%
 					}

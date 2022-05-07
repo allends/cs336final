@@ -179,6 +179,10 @@ public class Auction {
 		return result;
 	}
 	
+	public void hello() {
+		System.out.println("hello");
+	}
+	
 	// Close the bidding
 	public void closeAuction() {}
 	

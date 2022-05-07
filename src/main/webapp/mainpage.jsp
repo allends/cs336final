@@ -23,15 +23,7 @@
 				<tr>    
 			</table>
 			<input type="submit" value="Log Out">
-		</form>
-		<form method="get" action="auctionPage.jsp">
-			<table>
-				<tr>    
-					<td>Item Id</td><td><input type="text" name="itemId"></td>
-				</tr>  
-			</table>
-			<input type="submit" value="Auction Page">
-		</form>
+		</form> 
 	</body>
 	<body>
 	<br>

@@ -23,7 +23,9 @@
 String newItemName = request.getParameter("itemName");
 String newMakeOfVehicle = request.getParameter("make");
 String newModelOfVehicle = request.getParameter("model");
+String itemType = request.getParameter("itemType");
 int numSeats = Integer.valueOf(request.getParameter("numSeats"));
+int year = Integer.valueOf(request.getParameter("year"));
 
 float minPrice = Float.valueOf(request.getParameter("minPrice"));
 float bidIncrement = Float.valueOf(request.getParameter("bidIncrement"));
@@ -31,7 +33,7 @@ java.sql.Date closeDate = java.sql.Date.valueOf(request.getParameter("closeDate"
 java.sql.Time closeTime = java.sql.Time.valueOf(request.getParameter("closeTime"));
 
 String usernameName = "" + session.getAttribute("username");
-Auction new_auction = new Auction(usernameName, newItemName, minPrice, bidIncrement, numSeats, newMakeOfVehicle, newModelOfVehicle, closeDate, closeTime);
+Auction new_auction = new Auction(usernameName, newItemName, itemType, minPrice, bidIncrement, numSeats, newMakeOfVehicle, newModelOfVehicle, year, closeDate, closeTime);
 %>
 
 <%

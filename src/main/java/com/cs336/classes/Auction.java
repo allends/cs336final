@@ -92,7 +92,7 @@ public class Auction {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("an error occurered");
+			System.out.println("Coun't create Auction");
 		}
 
 	}
@@ -131,7 +131,8 @@ public class Auction {
 			}
 
 		} catch (Exception e) {
-			System.out.println("an error occurered");
+			System.out.println("Couldn't retrieve Auction");
+			e.printStackTrace();
 		}
 	}
 
@@ -141,36 +142,12 @@ public class Auction {
 		Connection con = db.getConnection();
 
 		try {
-			String emptyCheck = "SELECT * FROM bids b";
+			String highestBid = "select max(bidAmount) from bids b where b.itemId = '" + this.itemId + "'";
 			Statement stmt = con.createStatement();
 
-			ResultSet result = stmt.executeQuery(emptyCheck);
-			if (result.next() == false) {
-				this.currentBidder = bidder;
-				this.currentBid = bidAmount;
-				this.updateAuction();
-
-				Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
-				return "Success!";
-			}
-			else {
-				String highestBid = "SELECT b.amountBid,b.bidder FROM bids b WHERE b.amountBid = (SELECT MAX(amountBid) FROM bids)";
-				stmt = con.createStatement();
-				result = stmt.executeQuery(highestBid);
-				while (result.next()) {
-				if ((this.bidIncrement != 0) && (this.bidIncrement +(result.getInt("amountBid")) <= bidAmount)) {
-					// update the entries
-					// update the auction in mysql
-					System.out.println("the bid is valid");
-					this.currentBidder = bidder;
-					this.currentBid = bidAmount;
-					this.updateAuction();
-
-					Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
-					this.outBidNotifications(result.getString("bidder"));
-					System.out.print("Success!");
-				} 
-				else if (result.getInt("amountBid") < bidAmount) {
+			ResultSet result = stmt.executeQuery(highestBid);
+			if (result.next()) {
+				if (result.getInt("amountBid") < bidAmount) {
 					// update the entries
 					// update the auction in mysql
 					System.out.println("the bid is valid");
@@ -181,24 +158,25 @@ public class Auction {
 					Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
 					this.outBidNotifications(result.getString("bidder"));
 					return "Success!";
-				}
-				
-				else {
+				} else {
 					// nothing
 					System.out.println("the bid is not high enough");
 					return "Bid not high enough!";
 				}
-				}
+			} else {
+				System.out.println("no bidder, youre the highest!");
+				this.currentBidder = bidder;
+				this.currentBid = bidAmount;
+				this.updateAuction();
+
+				Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
+				return "Success!";
 			}
 		}
-			
-		
-
 		 catch (Exception e) {
 			e.printStackTrace();
 			return "System error, try again please!";
 		}
-		return "EBAY";
 	}
 
 	public void updateAuction() {
@@ -220,6 +198,9 @@ public class Auction {
 	public boolean isOpen() {
 		Date today = new Date(System.currentTimeMillis());
 		Time now = new Time(System.currentTimeMillis());
+		if (this.closeDate == null) {
+			return false;
+		}
 		if (today.before(this.closeDate)) {
 			return true;
 		} else if (today.compareTo(this.closeDate) == 0 && now.before(this.closeTime)) {
@@ -276,7 +257,33 @@ public class Auction {
 			Statement stmt = con.createStatement();
 			stmt = con.createStatement();
 			String str = "SELECT * FROM comments c WHERE c.itemId = '" + this.itemId
-					+ "' ORDER BY c.datePosted DESC, c.timePosted ASC";
+					+ "' AND repliedTo IS NULL ORDER BY c.datePosted DESC, c.timePosted ASC";
+			// Run the query against the database.
+			ResultSet comments = stmt.executeQuery(str);
+			while (comments.next()) {
+				result.add(new Comment(comments.getInt("commentId")));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("an error occurered");
+		}
+		return result;
+	}
+
+	// Return a list of bids for this Auction
+	public ArrayList<Comment> getCommentsFiltered(String term) {
+		ArrayList<Comment> result = new ArrayList<Comment>();
+
+		// Get the database connection
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+
+		try {
+			// Create a SQL statement
+			Statement stmt = con.createStatement();
+			stmt = con.createStatement();
+			// order by c.datePosted desc, c.timePosted asc
+			String str = "select * from comments c where match(content) against ('" + term + "' in natural language mode) and c.itemId = '" + this.itemId + "' and repliedTo is null";
 			// Run the query against the database.
 			ResultSet comments = stmt.executeQuery(str);
 			while (comments.next()) {

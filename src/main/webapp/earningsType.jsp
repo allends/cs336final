@@ -8,11 +8,9 @@
 <head>
 <meta charset="ISO-8859-1">
 <% Report temp = new Report();
-List<String[]> list = temp.totalEarnings();
-float sum = temp.returnSum();
-
+List<String[]> list = temp.typeEarnings();
 %>
-<title>Total Earnings</title>
+<title>Earnings by Item Type</title>
 <style>
 	.navigation-container {
 		display: flex;
@@ -23,12 +21,12 @@ float sum = temp.returnSum();
 </head>
 <body>
 	<CENTER>
-		<h1>Total Earnings: $<%=sum%><br></h1>
+		<h1>Earnings by Item Type<br></h1>
 		<h2>Earnings Breakdown<br></h2>
 		<table>
 			<tr>
-				<th>Item Name </th>
-				<th>Price </th>
+				<th>Item Type </th>
+				<th>Earnings </th>
 			</tr>
 			<% for (String[] value : list) {
 					%>
@@ -50,6 +48,6 @@ float sum = temp.returnSum();
 				<input type="submit" value="Log Out">
 			</form>
 		</div>
-</CENTER>
+	</CENTER>
 </body>
 </html>

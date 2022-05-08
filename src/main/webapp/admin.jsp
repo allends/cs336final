@@ -49,6 +49,9 @@
 		<form method="get" action="earningsTotal.jsp">
 			<input type="submit" value="Total Earnings">
 		</form>
+		<form method="get" action="earningsType.jsp">
+			<input type="submit" value="Earnings by Item Type">
+		</form>
 	<br>
 
 </body>

@@ -45,5 +45,46 @@ public class Report {
 		this.sum = 0.0f;
 		return temp;
 	}
+	
+	public ArrayList<String[]> typeEarnings() {
+		ArrayList<String[]> result = new ArrayList<String[]>();
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+
+		try {
+			// Create a SQL statement
+			Statement stmt = con.createStatement();
+			stmt = con.createStatement();
+			String car = "SELECT SUM(currentBid) FROM items i WHERE i.isOpen = 0 and i.itemType = \'car\' ";
+			// Run the query against the database.
+			ResultSet carType = stmt.executeQuery(car);
+			while (carType.next()) {
+				String carArr[] = {"Car", carType.getString(1)};
+				result.add(carArr);
+			}
+			
+			String truck = "SELECT SUM(currentBid) FROM items i WHERE i.isOpen = 0 and i.itemType = \'truck\' ";
+			// Run the query against the database.
+			ResultSet truckType = stmt.executeQuery(truck);
+			while (truckType.next()) {
+				String truckArr[] = {"Truck", truckType.getString(1)};
+				result.add(truckArr);
+			}
+			
+			String bike = "SELECT SUM(currentBid) FROM items i WHERE i.isOpen = 0 and i.itemType = \'bike\' ";
+			// Run the query against the database.
+			ResultSet bikeType = stmt.executeQuery(bike);
+			while (bikeType.next()) {
+				String bikeArr[] = {"Bike", bikeType.getString(1)};
+				result.add(bikeArr);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("An error occurred");
+		}
+		
+		return result;
+		
+	}
 
 }

@@ -43,6 +43,13 @@
 			<input type="submit" value="Create Account">
 		</form>
 	<br>
+	
+	Generate reports
+	<br>
+		<form method="get" action="earningsTotal.jsp">
+			<input type="submit" value="Total Earnings">
+		</form>
+	<br>
 
 </body>
 </html>

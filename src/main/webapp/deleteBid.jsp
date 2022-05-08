@@ -29,32 +29,24 @@ try {
 	PreparedStatement ps = con.prepareStatement(delete);
 	ps.setInt(1,bidId);
 	ps.execute();
-	if (auctionInfo.currentBid == currentBid.bidAmount) {
-		
+	if (auctionInfo.currentBid == currentBid.bidAmount) { // reset bids for that auction
 		ps = con.prepareStatement(
 		      "UPDATE items SET currentBidder = ?, currentBid = ? WHERE itemId = ?");
 	//Create a Prepared SQL statement allowing you to introduce the parameters of the query
-	
-		String str = "SELECT b.bidder, MAX(b.amountBid) as maxBid FROM bids b WHERE b.itemId = '"+itemId + "' group by b.bidId";
-		ResultSet result = stmt.executeQuery(str);
-		if (result.next() == false) {
-			ps.setNull(1, java.sql.Types.NULL);
-			ps.setFloat(2,0.0f);
-			ps.setInt(3,itemId);
+		ps.setNull(1, java.sql.Types.NULL);
+		ps.setFloat(2,0.0f);
+		ps.setInt(3,itemId);
+		ps.executeUpdate();
+		ps.close();
 			
-			ps.executeUpdate();
-			ps.close();
-		}
-		else if (result.next() == true) {
-			String currentBidder = result.getString("bidder");
-			Float amountBid = result.getFloat("maxBid");
-			ps.setString(1,currentBidder);
-			ps.setFloat(2,amountBid);
-			ps.setInt(3,itemId);
-			ps.executeUpdate();
-			ps.close();
-		}
+		String str = "DELETE FROM bids b WHERE b.itemId = ?";
+		ps = con.prepareStatement(str);
+		ps.setInt(1,itemId);
+		ps.execute();
+		
+		
 	}
+	
 	
 	
 	out.print("Bid successfully deleted!");

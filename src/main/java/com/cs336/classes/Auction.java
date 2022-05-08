@@ -142,7 +142,7 @@ public class Auction {
 			Statement stmt = con.createStatement();
 
 			ResultSet result = stmt.executeQuery(highestBid);
-			while (result.next()) {
+			if (result.next()) {
 				if (result.getInt("amountBid") < bidAmount) {
 					// update the entries
 					// update the auction in mysql
@@ -159,13 +159,20 @@ public class Auction {
 					System.out.println("the bid is not high enough");
 					return "Bid not high enough!";
 				}
+			} else {
+				System.out.println("no bidder, youre the highest!");
+				this.currentBidder = bidder;
+				this.currentBid = bidAmount;
+				this.updateAuction();
+
+				Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
+				return "Success!";
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "System error, try again please!";
 		}
-		return "EBAY";
 	}
 
 	public void updateAuction() {

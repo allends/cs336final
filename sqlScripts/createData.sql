@@ -9,3 +9,4 @@ values ('1234', 'Massive Truck', 'eoin', 'truck', 'ford', 'f150', '1883', '5', '
 insert into `cs336project`.`comments` (`commentId`, `itemId`, `username`, `content`, `datePosted`, `timePosted`) values ('345', '1234', 'allends', 'Wow, this really is a massive truck', '2022-05-05', '12:00:00');
 
 insert into `cs336project`.`bids` (`bidId`, `itemId`, `bidder`, `amountBid`) values ('987', '1234', 'sidhu', '400');
+ 

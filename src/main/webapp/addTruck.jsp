@@ -46,7 +46,7 @@
 		<td>Model of Vehicle</td><td><input type="text" name="model"></td>
 		</tr>
 		<tr>
-		<td>Year</td><td><input type="text" name="model"></td>
+		<td>Year</td><td><input type="text" name="year"></td>
 		</tr>
 		<tr>
 		<td>Number of Seats</td><td><input type="text" name="numSeats"></td>
@@ -73,7 +73,7 @@
 		<td>Miles per Gallon</td><td><input type="text" name="mpg"></td>
 		</tr>
 		<tr>
-		<td>Horsepower</td><td><input type="text" name="horsepower"></td>
+		<td>Horsepower</td><td><input typ=e="text" name="horsepower"></td>
 		</tr>
 		</table>
 		</form>

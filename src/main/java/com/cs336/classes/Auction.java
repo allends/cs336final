@@ -22,6 +22,7 @@ public class Auction {
 	public String currentBidder;
 	public Date closeDate;
 	public Time closeTime;
+	public boolean isOpen;
 
 	public Auction(String sellerUsername, String itemName, String itemType, float minPrice, float bidIncrement, int numSeats, String make,
 			String model, int year, Date closeDate, Time closeTime) {
@@ -49,8 +50,8 @@ public class Auction {
 			}
 
 			// Make an insert statement for the Sells table:
-			String insert = "INSERT INTO items(itemId,itemName,sellerUsername,itemType,make,model,year,numSeats,minPrice,bidIncrement,closeDate,closeTime,currentBid)"
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
+			String insert = "INSERT INTO items(itemId,itemName,sellerUsername,itemType,make,model,year,numSeats,minPrice,bidIncrement,closeDate,closeTime,currentBid, isOpen)"
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			// Create the insert statement
 			PreparedStatement ps = con.prepareStatement(insert);
@@ -67,6 +68,7 @@ public class Auction {
 			ps.setDate(11, closeDate);
 			ps.setTime(12, closeTime);
 			ps.setFloat(13, 0);
+			ps.setBoolean(14, true);
 
 			// Add the item to the database
 			ps.executeUpdate();
@@ -86,6 +88,7 @@ public class Auction {
 			this.closeTime = closeTime;
 			this.currentBid = 0f;
 			this.currentBidder = "";
+			this.isOpen = true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,6 +127,7 @@ public class Auction {
 				this.currentBid = result.getFloat("currentBid");
 				this.bidIncrement = result.getFloat("bidIncrement");
 				this.currentBidder = result.getString("currentBidder") != null ? result.getString("currentBidder") : "";
+				this.isOpen = result.getBoolean("isOpen");
 			}
 
 		} catch (Exception e) {

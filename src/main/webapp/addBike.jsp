@@ -43,7 +43,7 @@
 		<td>Model of Vehicle</td><td><input type="text" name="model"></td>
 		</tr>
 		<tr>
-		<td>Year</td><td><input type="text" name="model"></td>
+		<td>Year</td><td><input type="text" name="year"></td>
 		</tr>
 		<tr>
 		<td>Number of Seats</td><td><input type="text" name="numSeats"></td>

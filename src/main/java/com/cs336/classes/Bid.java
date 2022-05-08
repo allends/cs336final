@@ -37,7 +37,7 @@ public class Bid {
 			}
 			
 			//Make an insert statement for the Sells table:
-			String insert = "INSERT INTO bids(bidId,itemId,bidder,bidAmount)"
+			String insert = "INSERT INTO bids(bidId,itemId,bidder,amountBid)"
 					+ "VALUES (?, ?, ?, ?)";
 			
 			//Create the insert statement

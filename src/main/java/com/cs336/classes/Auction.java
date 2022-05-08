@@ -141,12 +141,36 @@ public class Auction {
 		Connection con = db.getConnection();
 
 		try {
-			String highestBid = "SELECT MAX(amountBid) as amountBid, bidder FROM bids b WHERE b.itemId=" + this.itemId + " GROUP BY bidder";
+			String emptyCheck = "SELECT * FROM bids b";
 			Statement stmt = con.createStatement();
 
-			ResultSet result = stmt.executeQuery(highestBid);
-			while (result.next()) {
-				if (result.getInt("amountBid") < bidAmount) {
+			ResultSet result = stmt.executeQuery(emptyCheck);
+			if (result.next() == false) {
+				this.currentBidder = bidder;
+				this.currentBid = bidAmount;
+				this.updateAuction();
+
+				Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
+				return "Success!";
+			}
+			else {
+				String highestBid = "SELECT b.amountBid,b.bidder FROM bids b WHERE b.amountBid = (SELECT MAX(amountBid) FROM bids)";
+				stmt = con.createStatement();
+				result = stmt.executeQuery(highestBid);
+				while (result.next()) {
+				if ((this.bidIncrement != 0) && (this.bidIncrement +(result.getInt("amountBid")) <= bidAmount)) {
+					// update the entries
+					// update the auction in mysql
+					System.out.println("the bid is valid");
+					this.currentBidder = bidder;
+					this.currentBid = bidAmount;
+					this.updateAuction();
+
+					Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
+					this.outBidNotifications(result.getString("bidder"));
+					System.out.print("Success!");
+				} 
+				else if (result.getInt("amountBid") < bidAmount) {
 					// update the entries
 					// update the auction in mysql
 					System.out.println("the bid is valid");
@@ -157,14 +181,20 @@ public class Auction {
 					Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
 					this.outBidNotifications(result.getString("bidder"));
 					return "Success!";
-				} else {
+				}
+				
+				else {
 					// nothing
 					System.out.println("the bid is not high enough");
 					return "Bid not high enough!";
 				}
+				}
 			}
+		}
+			
+		
 
-		} catch (Exception e) {
+		 catch (Exception e) {
 			e.printStackTrace();
 			return "System error, try again please!";
 		}
@@ -239,7 +269,9 @@ public class Auction {
 	}
 
 	public void outBidNotifications(String userName) {
-
+		String outBidMessage = "You have been outbid on auction " + this.itemName + "(" + this.itemId + ")!";
+		Alert outBidAlert = new Alert(this.itemId, userName, outBidMessage);
+		
 	}
 
 	public void hello() {

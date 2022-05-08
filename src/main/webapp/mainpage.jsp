@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
+	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*,com.cs336.classes.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 
@@ -24,7 +24,63 @@
 				 %> 
 		</h1>
 	</CENTER>
+	<%
+	java.sql.Time now = new java.sql.Time(Calendar.getInstance().getTime().getTime());
+	java.sql.Date today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+	
+    // Get the database connection
+    ApplicationDB db = new ApplicationDB();
+    Connection con = db.getConnection();
+
+    try {
+        Statement stmt = con.createStatement();
+        String str = "select * from items i where i.isOpen = 1";
+        ResultSet result = stmt.executeQuery(str);
+
+
+        while (result.next()){
+        	int itemId = result.getInt("itemId");
+        	String winningUsername = result.getString("currentBidder");
+        	String seller = result.getString("sellerUsername");
+        	String itemName = result.getString("itemName");
+        	java.sql.Date closeDate = result.getDate("closeDate");
+    		java.sql.Time closeTime = result.getTime("closeTime");
+    		Float currentBid = result.getFloat("currentBid");
+    		Float minPrice = result.getFloat("minPrice");
+    		
+            if (today.after(closeDate)||(today.compareTo(closeDate) == 0 && now.after(closeTime))) {
+                PreparedStatement close = con.prepareStatement(
+                        "UPDATE items SET isOpen = ? WHERE itemId = ?");
+                    close.setBoolean(1, false);
+                    close.setInt(2, itemId);
+                    close.executeUpdate();
+
+                if (currentBid < minPrice) { 
+                    String delete = "DELETE FROM items i WHERE i.itemId = ?";
+                    PreparedStatement del = con.prepareStatement(delete);
+                    del.setInt(1,itemId);
+                    del.executeUpdate();
+                    /* System.out.print("Auction successfully deleted!");                    String auctionClosedMessage = "This auction has been closed without a winner " + itemName + "(" + itemId + ")!";
+            		Alert auctionEndedNotif = new Alert(itemId, winningUsername, auctionClosedMessage);
+            		String unsuccessfulSell = "You have been sold the item in auction " + itemName + "(" + itemId + ")!";
+            		Alert noSellAuction = new Alert(itemId, seller, unsuccessfulSell);
+            		*/
+                }
+
+                else {
+                	String winningMessage = "You have been won auction " + itemName + "(" + itemId + ")!";
+            		Alert wonAuction = new Alert(itemId, winningUsername, winningMessage);
+            		String successfulSell = "You have been sold the item in auction " + itemName + "(" + itemId + ")!";
+            		Alert soldAuction = new Alert(itemId, seller, successfulSell);
+                }
+            }
+        }
+
+    } catch (Exception e){
+    }
+	%>
 	<br>
+	
 		&ensp;
 	Click here to view all alerts from your bids!
 		<form method="get" action="viewAlerts.jsp">
@@ -151,7 +207,7 @@
 		</form> 
 	</body>
 	<CENTER>
-		<h4>Naviagtion</h4>
+		<h4>Navigation</h4>
 		<div class="navigation-container">
 			<form method="get" action="logout.jsp">
 				<table>

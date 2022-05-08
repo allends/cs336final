@@ -1,9 +1,11 @@
 package com.cs336.classes;
 
 import com.cs336.pkg.ApplicationDB;
-
-import java.sql.*;
+import com.cs336.classes.Alert;
+import com.cs366.classes.Bid;
+import java.sql.*; 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 public class Auction {
@@ -304,6 +306,31 @@ public class Auction {
 
 	public void hello() {
 		System.out.println("hello");
+	}
+	
+	public ArrayList<Auction> getSimilar() {
+		ArrayList<Auction> result = new ArrayList<Auction>();
+
+		// Get the database connection
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+
+		try {
+			// Create a SQL statement
+			Statement stmt = con.createStatement();
+			stmt = con.createStatement();
+			// order by c.datePosted desc, c.timePosted asc
+			String str = "select * from items i where i.itemType = '" + this.itemType + "'";
+			// Run the query against the database.
+			ResultSet comments = stmt.executeQuery(str);
+			while (comments.next()) {
+				result.add(new Auction(comments.getInt("itemId")));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("an error occurered");
+		}
+		return result;
 	}
 
 	// Close the bidding

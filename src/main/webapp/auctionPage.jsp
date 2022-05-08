@@ -96,7 +96,7 @@
 				<th>Username </th>
 				<th>Bid Amount</th>
 			</tr>
-		<%
+			<%
 				ArrayList<Bid> bidList = selectedAuction.getBids();
 				for (Bid bid : bidList) {
 					%>
@@ -117,6 +117,11 @@
 			<form method="get" action="questionSearch.jsp"> 
 				<input type="text" name="itemId" hidden="true" value="<%= selectedAuction.itemId %>"></td>
 				<td>Search term</td><td><input type="text" name="searchTerm"></td>
+				<input type="submit" value="Search!">
+			</form>
+			<form method="get" action="similarAuctions.jsp"> 
+				<input type="text" name="itemId" hidden="true" value="<%= selectedAuction.itemId %>"></td>
+				<td>Similar Auctions</td>
 				<input type="submit" value="Search!">
 			</form>
 		</div>

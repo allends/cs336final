@@ -13,7 +13,7 @@
 	
 	<body>
 	<body>
-		<% String welcomeStr = "Welcome Customer Representative " + session.getAttribute("user") + "!" ;
+		<% String welcomeStr = "Welcome Customer Representative " + session.getAttribute("username") + "!" ;
 		out.print(welcomeStr);
 		   %>
 		

@@ -5,14 +5,15 @@ import com.cs336.pkg.ApplicationDB;
 import java.sql.*;
 import java.util.Random;
 
-public class Bid {
+public class Truck {
 	
-	public int bidId;
 	public int itemId;
-	public String bidder;
-	public float bidAmount;
+	public boolean hasTruckBed;
+	public float towingPower;
+	public float mpg;
+	public float horsepower;
 	
-	public Bid(int itemId, String bidder, float bidAmount) {
+	public Truck(int itemId, boolean hasTruckBed, float towingPower, float mpg, float horsepower) {
 		
 		//Get the database connection
 		ApplicationDB db = new ApplicationDB();	
@@ -20,41 +21,28 @@ public class Bid {
 
 		try {
 			//Create a SQL statement
-			Statement stmt = con.createStatement();
-			int bidId = 1;
-			while (true) {
-				Random randInt = new Random();
-				int upperBound = 100000;
-				bidId = bidId * randInt.nextInt(upperBound);
-				stmt = con.createStatement();
-				String str = "SELECT * FROM bids b WHERE b.bidId = '" + bidId + "'";
-				//Run the query against the database.
-				ResultSet result = stmt.executeQuery(str);
-				if (result.next() == false) {
-					break;
-				}
 
-			}
-			
 			//Make an insert statement for the Sells table:
-			String insert = "INSERT INTO bids(bidId,itemId,bidder,amountBid)"
-					+ "VALUES (?, ?, ?, ?)";
+			String insert = "INSERT INTO trucks(itemId,hasTruckBed,towingPower,mpg,horsepower)"
+					+ "VALUES (?, ?, ?, ?, ?)";
 			
 			//Create the insert statement
 			PreparedStatement ps = con.prepareStatement(insert);
-			ps.setInt(1, bidId);
-			ps.setInt(2, itemId);
-			ps.setString(3, bidder);
-			ps.setFloat(4, bidAmount);
+			ps.setInt(1, itemId);
+			ps.setBoolean(2, hasTruckBed);
+			ps.setFloat(3, towingPower);
+			ps.setFloat(4, mpg);
+			ps.setFloat(5, horsepower);
 			
 			// Add the item to the database
 			ps.executeUpdate();
 			
 			// Set the values of this object
-			this.bidId = bidId;
 			this.itemId = itemId;
-			this.bidder = bidder;
-			this.bidAmount = bidAmount;
+			this.hasTruckBed = hasTruckBed;
+			this.towingPower = towingPower;
+			this.mpg = mpg;
+			this.horsepower = horsepower;
 			
 		} catch (Exception e) {
 			System.out.println("an error occurred");
@@ -62,7 +50,7 @@ public class Bid {
 		
 	}
 	
-	public Bid(int bidId) {
+	public Truck(int itemId) {
 		//Get the database connection
 		ApplicationDB db = new ApplicationDB();	
 		Connection con = db.getConnection();
@@ -72,15 +60,17 @@ public class Bid {
 			Statement stmt = con.createStatement();
 			
 			//Get the Auction with the associated itemId:
-			String str = "SELECT * FROM bids b WHERE b.bidId = '" + bidId + "'";
+			String str = "SELECT * FROM trucks t WHERE t.itemId = '" + itemId + "'";
 			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 			ResultSet result = stmt.executeQuery(str);
 			
 			while (result.next()) {
-				this.bidId = bidId;
-				this.itemId = result.getInt("itemId");
-				this.bidder = result.getString("bidder");
-				this.bidAmount = result.getFloat("amountBid");
+				this.itemId = itemId;
+				this.hasTruckBed = result.getBoolean("hasTruckBed");
+				this.towingPower = result.getFloat("towingPower");
+				this.mpg = result.getFloat("mpg");
+				this.horsepower = result.getFloat("horsepower");
+
 			}
 			
 		} catch (Exception e) {

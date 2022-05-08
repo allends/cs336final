@@ -31,7 +31,7 @@
 	Please submit the characteristics of the car you are posting:
 	<br>
 		<form method="post" action="newItemAuction.jsp">
-		<input type="text" name="itemType" hidden="true" value="bike">
+		<input type="hidden" name="itemType" value="car">
 		<table>
 		<tr>    
 		<td>Item Name</td><td><input type="text" name="itemName"></td>
@@ -73,6 +73,7 @@
 		<td>Does it have a navigation system? (enter "true" or "false")</td><td><input type="text" name="hasNavigation"></td>
 		</tr>
 		</table>
+		<input type="submit" value="Submit to Add Auction">
 		</form>
 		
 	<CENTER>

@@ -56,13 +56,14 @@
 			if (orderby == null) {
 				orderby = "ASC";
 			}
-			String str = "SELECT * FROM items i WHERE i.sellerUsername != '" + usernameName + "'" + " ORDER BY " + sortby + " " + orderby;
+			String str = "SELECT * FROM items i WHERE i.sellerUsername != '" + usernameName + "' AND i.isOpen = 1" + " ORDER BY " + sortby + " " + orderby;
 			//Run the query against the database.
 			ResultSet result = stmt.executeQuery(str);
 			
 			%>
 			<table>
 				<tr>
+					<td>Item ID/td>
 					<td>Item Name</td>
 					<td>Make</td>
 					<td>Model</td>
@@ -78,12 +79,13 @@
 						Auction current = new Auction(result.getInt("itemId"));
 						%>
 							<tr>
+								<td><%= current.itemId %></td>
 								<td><%= current.itemName %></td>
 								<td><%= current.make %></td>
 								<td><%= current.model %></td>
 								<td><%= current.closeDate %></td>
 								<td><%= current.closeTime %></td>
-								<td><%= current.getStatus() %></td>
+								<td><%= current.isOpen %></td>
 								<td><%= current.currentBid %></td>
 								<td><%= current.currentBidder %></td>
 								<td>

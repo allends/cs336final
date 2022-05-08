@@ -35,6 +35,7 @@
 		<h1><%= selectedAuction.itemName %> for sale by <%= selectedAuction.sellerUsername %></h1>
 		<table>
 			<tr>
+				<th>Item ID </th>
 				<th>Item Name </th>
 				<th>Seller</th>
 				<th>Make</th>
@@ -46,6 +47,7 @@
 				<th>Current highest bidder</th>
 			</tr>
 			<tr>
+				<td><%= selectedAuction.itemId %>
 				<td><%= selectedAuction.itemName %>
 				<td><%= selectedAuction.sellerUsername %>
 				<td><%= selectedAuction.make %>
@@ -65,6 +67,27 @@
 			<input type="submit" value="Submit the bid request!">
 		</form>
 		<br>
+		<h3>Bid History</h3>
+		<table>
+			<tr>
+				<th>Bid ID</th>
+				<th>Username </th>
+				<th>Bid Amount</th>
+			</tr>
+		<%
+				ArrayList<Bid> bidList = selectedAuction.getBids();
+				for (Bid bid : bidList) {
+					%>
+						<tr>
+							<td><%= bid.bidId %></td>
+							<td><%= bid.bidder %></td>
+							<td><%= bid.bidAmount %></td>
+							
+						</tr>
+					<%
+				}
+			%>
+		</table>
 		<h3>Comments/Questions</h3>
 		<table>
 			<tr>
@@ -104,7 +127,7 @@
 			</table>
 		</form>
 	
-		<h4>Naviagtion</h4>
+		<h4>Navigation</h4>
 		<div class="navigation-container">
 			<form method="get" action="viewNonOwnedAuctions.jsp">
 				<input type="submit" value="Back to Auctions">

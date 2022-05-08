@@ -239,7 +239,28 @@ public class Auction {
 	}
 
 	// Return a list of bids for this Auction
-	public void getBids() {
+	public ArrayList<Bid> getBids() {
+		ArrayList<Bid> result = new ArrayList<Bid>();
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+
+		try {
+			// Create a SQL statement
+			Statement stmt = con.createStatement();
+			stmt = con.createStatement();
+			String str = "SELECT * FROM bids b WHERE b.itemId = '" + this.itemId
+					+ "' ORDER BY b.amountBid DESC";
+			// Run the query against the database.
+			ResultSet bids = stmt.executeQuery(str);
+			while (bids.next()) {
+				result.add(new Bid(bids.getInt("bidId")));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("an error occurered");
+		}
+		return result;
+		
 	}
 
 	// Return a list of bids for this Auction

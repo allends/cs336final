@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*,com.cs336.classes.*"%>
-<%@ page import="java.io.*,java.util.*,java.sql.*"%>
+<%@ page import="java.io.*,java.util.*,java.sql.*, java.util.Date"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -25,8 +25,8 @@
 		</h1>
 	</CENTER>
 	<%
-	java.sql.Time now = new java.sql.Time(Calendar.getInstance().getTime().getTime());
-	java.sql.Date today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+	java.time.LocalDate today = java.time.LocalDate.now();
+	java.time.LocalTime now = java.time.LocalTime.now();
 	
     // Get the database connection
     ApplicationDB db = new ApplicationDB();
@@ -37,18 +37,29 @@
         String str = "select * from items i where i.isOpen = 1";
         ResultSet result = stmt.executeQuery(str);
 
+    	
 
         while (result.next()){
         	int itemId = result.getInt("itemId");
         	String winningUsername = result.getString("currentBidder");
         	String seller = result.getString("sellerUsername");
         	String itemName = result.getString("itemName");
-        	java.sql.Date closeDate = result.getDate("closeDate");
-    		java.sql.Time closeTime = result.getTime("closeTime");
+        	java.time.format.DateTimeFormatter t = java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss");
+        	String closeDateS = result.getDate("closeDate").toString();
+        	java.time.LocalDate closeDate = java.time.LocalDate.parse(closeDateS);
+        	String closeTimeS = result.getTime("closeTime").toString();
+        	java.time.LocalTime closeTime = java.time.LocalTime.parse(closeTimeS, t);
+        	out.println(closeTime.toString());
     		Float currentBid = result.getFloat("currentBid");
     		Float minPrice = result.getFloat("minPrice");
     		
-            if (today.after(closeDate)||(today.compareTo(closeDate) == 0 && now.after(closeTime))) {
+    		
+    		out.println(closeDate);
+    		out.println(closeTime + "<br>");
+    		out.println((today.compareTo(closeDate)));
+    		out.println(now.compareTo(closeTime) + "<br><br>");
+    		
+            if (today.compareTo(closeDate) > 0 || today.compareTo(closeDate) == 0 && now.compareTo(closeTime) > 0) {
                 PreparedStatement close = con.prepareStatement(
                         "UPDATE items SET isOpen = ? WHERE itemId = ?");
                     close.setBoolean(1, false);

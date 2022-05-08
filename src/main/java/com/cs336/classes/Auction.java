@@ -89,7 +89,7 @@ public class Auction {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("an error occurered");
+			System.out.println("Coun't create Auction");
 		}
 
 	}
@@ -127,7 +127,8 @@ public class Auction {
 			}
 
 		} catch (Exception e) {
-			System.out.println("an error occurered");
+			System.out.println("Couldn't retrieve Auction");
+			e.printStackTrace();
 		}
 	}
 
@@ -186,6 +187,9 @@ public class Auction {
 	public boolean isOpen() {
 		Date today = new Date(System.currentTimeMillis());
 		Time now = new Time(System.currentTimeMillis());
+		if (this.closeDate == null) {
+			return false;
+		}
 		if (today.before(this.closeDate)) {
 			return true;
 		} else if (today.compareTo(this.closeDate) == 0 && now.before(this.closeTime)) {
@@ -221,7 +225,7 @@ public class Auction {
 			Statement stmt = con.createStatement();
 			stmt = con.createStatement();
 			String str = "SELECT * FROM comments c WHERE c.itemId = '" + this.itemId
-					+ "' ORDER BY c.datePosted DESC, c.timePosted ASC";
+					+ "' AND repliedTo IS NULL ORDER BY c.datePosted DESC, c.timePosted ASC";
 			// Run the query against the database.
 			ResultSet comments = stmt.executeQuery(str);
 			while (comments.next()) {

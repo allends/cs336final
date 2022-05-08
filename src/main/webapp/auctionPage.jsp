@@ -76,7 +76,9 @@
 			<%
 				ArrayList<Comment> commentList = selectedAuction.getComments();
 				for (Comment comment : commentList) {
+					ArrayList<Comment> replyList = comment.getReplies(comment.commentId);
 					%>
+					<br>
 						<tr>
 							<td><%= comment.username %></td>
 							<td><%= comment.content %></td>
@@ -84,24 +86,40 @@
 							<td><%= comment.timePosted %></td>
 						</tr>
 					<%
+					for (Comment reply : replyList) {
+						%>
+							<tr>
+								<td> ^ <%= reply.username %></td>
+								<td><%= reply.content %></td>
+								<td><%= reply.datePosted %></td>
+								<td><%= reply.timePosted %></td>
+							</tr>
+						<%
+					}
+					%>
+					<tr>
+						<form method="post" action="processComment.jsp">
+							<input type="text" value="" name="content">
+							<input type="submit" value="Add answer">
+							<input type="text" name="itemId" value="<%= selectedAuction.itemId %>" hidden="true">
+							<input type="text" name="repliedTo" value="<%= comment.commentId %>" hidden="true">
+						</form>
+					</tr>
+					<br>
+					<%
 				}
+				
 			%>
 		</table>
-		<form method="post" action="#">
-			<%
-				String content = request.getParameter("content");
-				String username = session.getAttribute("username") + "";
-				if (content != null && content.length() > 1) {
-					Comment addedComment = new Comment(selectedAuction.itemId, username, content);
-					request.setAttribute("content", null);
-				}
-			%>
+		<form method="post" action="processComment.jsp">
 			<table>
 				<tr>
 					<td><input type="text" value="" name="content"></td>
 					<td><input type="submit" value="Post comment"></td>
 				</tr>
 			</table>
+			<input type="text" name="itemId" value="<%= selectedAuction.itemId %>" hidden="true">
+			<input type="text" value="<%= selectedAuction.itemId %>" hidden="true">
 		</form>
 	
 		<h4>Naviagtion</h4>

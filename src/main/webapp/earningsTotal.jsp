@@ -7,6 +7,11 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<% Report temp = new Report();
+List<String[]> list = temp.totalEarnings();
+float sum = temp.returnSum();
+
+%>
 <title>Total Earnings</title>
 <style>
 	.navigation-container {
@@ -18,12 +23,8 @@
 </head>
 <body>
 	<CENTER>
-<%
-
-	Report temp = new Report();
-	List<String[]> list = temp.totalEarnings();
-	%>
-		<h1>Earnings Report</h1>
+		<h1>Total Earnings: $<%=sum%><br></h1>
+		<h2>Earnings Breakdown<br></h2>
 		<table>
 			<tr>
 				<th>Item Name </th>

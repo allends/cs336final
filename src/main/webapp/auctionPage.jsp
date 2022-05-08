@@ -14,6 +14,28 @@
 		flex-direction: column;
 		row-gap: 5px;
 	}
+	.comment-container {
+		display: flex;
+		flex-direction: column;
+		row-gap: 15px;
+		margin-top: 10px;
+		width: 50vw;
+	}
+	.comment {
+		border-style: solid;
+		border-color: black;
+		border-width: 2px;
+		border-radius: 5px;
+		padding-bottom: 10px;
+	}
+	.reply-container {
+		display: flex;
+		flex-direction: column;
+		row-gap: 5px;
+	}
+	.reply {
+
+	}
 </style>
 </head>
 <body>
@@ -66,56 +88,57 @@
 		</form>
 		<br>
 		<h3>Comments/Questions</h3>
-		<table>
-			<tr>
-				<th>Username </th>
-				<th>Comment</th>
-				<th>Date</th>
-				<th>Time</th>
-			</tr>
+
+		<div class="search-bar">
+			<h4>Search for questions/answers: </h4>
+			<form method="get" action="questionSearch.jsp"> 
+				<input type="text" name="itemId" hidden="true" value="<%= selectedAuction.itemId %>"></td>
+				<td>Search term</td><td><input type="text" name="searchTerm"></td>
+				<input type="submit" value="Search!">
+			</form>
+		</div>
+
+		<div class="comment-container">
 			<%
 				ArrayList<Comment> commentList = selectedAuction.getComments();
 				for (Comment comment : commentList) {
 					ArrayList<Comment> replyList = comment.getReplies(comment.commentId);
 					%>
-					<br>
-						<tr>
-							<td><%= comment.username %></td>
-							<td><%= comment.content %></td>
-							<td><%= comment.datePosted %></td>
-							<td><%= comment.timePosted %></td>
-						</tr>
+					<div class="comment">
+						<p><b><%= comment.username %> on <%= comment.datePosted %></b></p>
+						<p><%= comment.content %></p>
+						<div class="reply-container">
 					<%
 					for (Comment reply : replyList) {
 						%>
-							<tr>
-								<td> ^ <%= reply.username %></td>
-								<td><%= reply.content %></td>
-								<td><%= reply.datePosted %></td>
-								<td><%= reply.timePosted %></td>
-							</tr>
+							<div class="reply">
+								<p>^ <b><%= reply.username %> on <%= reply.datePosted %></b></p>
+								<p><%= reply.content %></p>
+							</div>
 						<%
 					}
 					%>
-					<tr>
-						<form method="post" action="processComment.jsp">
-							<input type="text" value="" name="content">
-							<input type="submit" value="Add answer">
-							<input type="text" name="itemId" value="<%= selectedAuction.itemId %>" hidden="true">
-							<input type="text" name="repliedTo" value="<%= comment.commentId %>" hidden="true">
-						</form>
-					</tr>
-					<br>
+						<div>
+							<form method="post" action="processComment.jsp">
+								<input type="text" value="" name="content">
+								<input type="submit" value="Add answer">
+								<input type="text" name="itemId" value="<%= selectedAuction.itemId %>" hidden="true">
+								<input type="text" name="repliedTo" value="<%= comment.commentId %>" hidden="true">
+							</form>
+						</div>
+					</div>
+					</div>
 					<%
 				}
 				
 			%>
-		</table>
+		</div>
+		<h4>Add a question: </h4>
 		<form method="post" action="processComment.jsp">
 			<table>
 				<tr>
 					<td><input type="text" value="" name="content"></td>
-					<td><input type="submit" value="Post comment"></td>
+					<td><input type="submit" value="Post question"></td>
 				</tr>
 			</table>
 			<input type="text" name="itemId" value="<%= selectedAuction.itemId %>" hidden="true">

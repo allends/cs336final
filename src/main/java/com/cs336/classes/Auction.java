@@ -238,6 +238,32 @@ public class Auction {
 		return result;
 	}
 
+	// Return a list of bids for this Auction
+	public ArrayList<Comment> getCommentsFiltered(String term) {
+		ArrayList<Comment> result = new ArrayList<Comment>();
+
+		// Get the database connection
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+
+		try {
+			// Create a SQL statement
+			Statement stmt = con.createStatement();
+			stmt = con.createStatement();
+			// order by c.datePosted desc, c.timePosted asc
+			String str = "select * from comments c where match(content) against ('" + term + "' in natural language mode) and c.itemId = '" + this.itemId + "' and repliedTo is null";
+			// Run the query against the database.
+			ResultSet comments = stmt.executeQuery(str);
+			while (comments.next()) {
+				result.add(new Comment(comments.getInt("commentId")));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("an error occurered");
+		}
+		return result;
+	}
+
 	public void outBidNotifications(String userName) {
 
 	}

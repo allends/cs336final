@@ -104,20 +104,6 @@
 		}
 	%>
 	<br>
-	<!-- Please insert the Item Id and Bid amount that you want to make on an auction!
-	<br>
-		<form method="get" action="processBid.jsp">
-			<table>
-				<tr>    
-					<td>Item Id</td><td><input type="text" name="itemId"></td>
-				</tr>
-				<tr>
-					<td>Bid Amount</td><td><input type="text" name="bidAmount"></td>
-				</tr>
-			</table>
-			<input type="submit" value="Submit the bid request!">
-		</form>
-	<br> -->
 	<h4>Naviagtion</h4>
 	<div class="navigation-container"> 
 		<form method="get" action="mainpage.jsp">

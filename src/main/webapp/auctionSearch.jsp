@@ -34,18 +34,10 @@
 			</select>
 			<input type="submit" value="Sort">
 		</form>
-		<h2>Search</h2>
-		<div class="search-bar">
-			<h4>Search for questions/answers: </h4>
-			<form method="get" action="auctionSearch.jsp"> 
-				<td>Search term</td><td><input type="text" name="auctionSearchTerm"></td>
-				<input type="submit" value="Search!">
-			</form>
-		</div>
 	<p> &ensp; </p>
 	<%
 		List<String> list = new ArrayList<String>();
-
+		String auctionSearchTerm = request.getParameter("auctionSearchTerm");
 		try {
 
 			//Get the database connection
@@ -64,7 +56,7 @@
 			if (orderby == null) {
 				orderby = "ASC";
 			}
-			String str = "SELECT * FROM items i WHERE i.sellerUsername != '" + usernameName + "'" + " ORDER BY " + sortby + " " + orderby;
+			String str = "SELECT * FROM items i WHERE i.sellerUsername != '" + usernameName + "' and match(itemName, itemType) against ('" + auctionSearchTerm + "' in natural language mode) ORDER BY " + sortby + " " + orderby;
 			//Run the query against the database.
 			ResultSet result = stmt.executeQuery(str);
 			

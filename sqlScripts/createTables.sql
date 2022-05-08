@@ -31,6 +31,7 @@ currentBid float,
 currentBidder varchar(30),
 bidIncrement float,
 isOpen boolean,
+fulltext(itemName, itemType),
 primary key (itemId),
 foreign key (sellerUsername) references accountInfo(username) ON DELETE CASCADE,
 foreign key (currentBidder) references accountInfo(username) ON DELETE CASCADE);

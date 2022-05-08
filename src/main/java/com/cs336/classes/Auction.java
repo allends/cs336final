@@ -11,18 +11,20 @@ public class Auction {
 	public int itemId;
 	public int numSeats;
 	public float currentBid;
+	public String itemType;
 	public float minPrice;
 	public float bidIncrement;
 	public String make;
 	public String model;
+	public int year;
 	public String itemName;
 	public String sellerUsername;
 	public String currentBidder;
 	public Date closeDate;
 	public Time closeTime;
 
-	public Auction(String sellerUsername, String itemName, float minPrice, float bidIncrement, int numSeats, String make,
-			String model, Date closeDate, Time closeTime) {
+	public Auction(String sellerUsername, String itemName, String itemType, float minPrice, float bidIncrement, int numSeats, String make,
+			String model, int year, Date closeDate, Time closeTime) {
 
 		// Get the database connection
 		ApplicationDB db = new ApplicationDB();
@@ -47,22 +49,24 @@ public class Auction {
 			}
 
 			// Make an insert statement for the Sells table:
-			String insert = "INSERT INTO items(itemId,itemName,sellerUsername,make,model,numSeats,minPrice,bidIncrement,closeDate,closeTime,currentBid)"
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String insert = "INSERT INTO items(itemId,itemName,sellerUsername,itemType,make,model,year,numSeats,minPrice,bidIncrement,closeDate,closeTime,currentBid)"
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
 
 			// Create the insert statement
 			PreparedStatement ps = con.prepareStatement(insert);
 			ps.setInt(1, itemid);
 			ps.setString(2, itemName);
 			ps.setString(3, sellerUsername);
-			ps.setString(4, make);
-			ps.setString(5, model);
-			ps.setInt(6, numSeats);
-			ps.setFloat(7, minPrice);
-			ps.setFloat(8, bidIncrement);
-			ps.setDate(9, closeDate);
-			ps.setTime(10, closeTime);
-			ps.setFloat(11, 0);
+			ps.setString(4, itemType);
+			ps.setString(5, make);
+			ps.setString(6, model);
+			ps.setInt(7, year);
+			ps.setInt(8, numSeats);
+			ps.setFloat(9, minPrice);
+			ps.setFloat(10, bidIncrement);
+			ps.setDate(11, closeDate);
+			ps.setTime(12, closeTime);
+			ps.setFloat(13, 0);
 
 			// Add the item to the database
 			ps.executeUpdate();
@@ -71,8 +75,10 @@ public class Auction {
 			this.itemId = itemid;
 			this.sellerUsername = sellerUsername;
 			this.itemName = itemName;
+			this.itemType = itemType;
 			this.make = make;
 			this.model = model;
+			this.year = year;
 			this.numSeats = numSeats;
 			this.minPrice = minPrice;
 			this.bidIncrement = bidIncrement;
@@ -107,8 +113,10 @@ public class Auction {
 				this.itemId = itemId;
 				this.sellerUsername = result.getString("sellerUsername");
 				this.itemName = result.getString("itemName");
+				this.itemType = result.getString("itemType");
 				this.make = result.getString("make");
 				this.model = result.getString("model");
+				this.year = result.getInt("year");
 				this.numSeats = result.getInt("numSeats");
 				this.minPrice = result.getInt("minPrice");
 				this.closeDate = result.getDate("closeDate");
@@ -129,12 +137,12 @@ public class Auction {
 		Connection con = db.getConnection();
 
 		try {
-			String highestBid = "SELECT MAX(bidAmount) as bidAmount, bidder FROM bids b WHERE b.itemId=" + this.itemId + " GROUP BY bidder";
+			String highestBid = "SELECT MAX(amountBid) as amountBid, bidder FROM bids b WHERE b.itemId=" + this.itemId + " GROUP BY bidder";
 			Statement stmt = con.createStatement();
 
 			ResultSet result = stmt.executeQuery(highestBid);
 			while (result.next()) {
-				if (result.getInt("bidAmount") < bidAmount) {
+				if (result.getInt("amountBid") < bidAmount) {
 					// update the entries
 					// update the auction in mysql
 					System.out.println("the bid is valid");

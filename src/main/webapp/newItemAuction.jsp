@@ -13,8 +13,10 @@
 	<%
 		//Get parameters from the HTML form at the mainpage.jsp
 		String newItemName = request.getParameter("itemName");
+		String newItemType = request.getParameter("itemType");
 		String newMakeOfVehicle = request.getParameter("make");
 		String newModelOfVehicle = request.getParameter("model");
+		int year = Integer.valueOf(request.getParameter("year"));
 		int numSeats = Integer.valueOf(request.getParameter("numSeats"));
 		
 		float minPrice = Float.valueOf(request.getParameter("minPrice"));
@@ -23,7 +25,7 @@
 		java.sql.Time closeTime = java.sql.Time.valueOf(request.getParameter("closeTime"));
 		
 		String usernameName = "" + session.getAttribute("username");
-		Auction new_auction = new Auction(usernameName, newItemName, minPrice, bidIncrement, numSeats, newMakeOfVehicle, newModelOfVehicle, closeDate, closeTime);
+		Auction new_auction = new Auction(usernameName, newItemName, newItemType, minPrice, bidIncrement, numSeats, newMakeOfVehicle, newModelOfVehicle, year, closeDate, closeTime);
 	%>
 	<p>
 	&ensp;

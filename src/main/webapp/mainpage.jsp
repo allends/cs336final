@@ -31,18 +31,24 @@
 			<input type="submit" value="Submit to View Alerts">
 		</form>	
 		&ensp;
-	Please enter the following information to post an item for an auction:
+	Please select which type of item you want to post for an auction:
 	<br>
 		<form method="post" action="newItemAuction.jsp">
 		<table>
 		<tr>    
 		<td>Item Name</td><td><input type="text" name="itemName"></td>
 		</tr>
+		<tr>    
+		<td>Item Type</td><td><input type="text" name="itemType"></td>
+		</tr>
 		<tr>
 		<td>Make of Vehicle</td><td><input type="text" name="make"></td>
 		</tr>
 		<tr>
 		<td>Model of Vehicle</td><td><input type="text" name="model"></td>
+		</tr>
+		<tr>
+		<td>Year</td><td><input type="text" name="year"></td>
 		</tr>
 		<tr>
 		<td>Number of Seats</td><td><input type="text" name="numSeats"></td>
@@ -60,9 +66,20 @@
 		<td>Closing Time</td><td><input type="text" name="closeTime"></td>
 		</tr>
 		</table>
-		<input type="submit" value="Add me!">
+		<input type="submit" value="Submit to Add Auction">
 		</form>
 	<br>
+		Click the type of item you want to post for an auction:!
+		<form method="get" action="addTruck.jsp">
+			<input type="submit" value="Truck">
+		</form>	
+		<form method="get" action="addBike.jsp">
+			<input type="submit" value="Bike">
+		</form>
+		<form method="get" action="addCar.jsp">
+			<input type="submit" value="Car">
+		</form>
+		
 	<p>
 	<p>
 	&emsp;

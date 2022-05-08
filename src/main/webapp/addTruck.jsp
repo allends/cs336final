@@ -34,7 +34,7 @@
 	Please submit the characteristics of the truck you are posting:
 	<br>
 		<form method="post" action="newItemAuction.jsp">
-		<input type="text" name="itemType" hidden="true" value="truck">
+		<input type="hidden" name="itemType" value="truck">
 		<table>
 		<tr>    
 		<td>Item Name</td><td><input type="text" name="itemName"></td>
@@ -46,7 +46,7 @@
 		<td>Model of Vehicle</td><td><input type="text" name="model"></td>
 		</tr>
 		<tr>
-		<td>Year</td><td><input type="text" name="model"></td>
+		<td>Year</td><td><input type="text" name="year"></td>
 		</tr>
 		<tr>
 		<td>Number of Seats</td><td><input type="text" name="numSeats"></td>
@@ -76,6 +76,7 @@
 		<td>Horsepower</td><td><input type="text" name="horsepower"></td>
 		</tr>
 		</table>
+		<input type="submit" value="Submit to Add Auction">
 		</form>
 		
 	

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
+	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*, com.cs336.classes.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 
@@ -7,31 +7,23 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
 </head>
-<body>
+<style>
+	.navigation-container {
+		display: flex;
+		flex-direction: column;
+		row-gap: 5px;
+	}
+table, th, td {
+  border: 1px solid black;
+  padding: 5px;
+}
+table {
+  border-spacing: 15px;
+}
+</style>
 	<body>
-		<form method="get" action="mainpage.jsp">
-			<table>
-				<tr>    
-			</table>
-			<input type="submit" value="Go Back to Home Page">
-		</form>
-	</body>
-	<body> 
-	</body>
-	</body>
-	<body>
-		<form method="get" action="logout.jsp">
-			<table>
-				<tr>    
-			</table>
-			<input type="submit" value="Log Out">
-		</form>
-	</body>
-	<body>
-	<p> &ensp; </p>
-	
+		<CENTER>
 	<%
 		List<String> list = new ArrayList<String>();
 
@@ -43,52 +35,66 @@
 			
 			//Create a SQL statement
 			Statement stmt = con.createStatement();
-			String usernamePoster = request.getParameter("usernamePoster");
-			out.print(usernamePoster + "'s Posting History:");
+			String username = request.getParameter("usernamePoster");
+			%>
+			
+			<h1> <%= username + "'s Auction Posting History"%></h1>
+			<%
 			//Make a SELECT query from the sells table with the price range specified by the 'price' parameter at the index.jsp
-			String str = "SELECT * FROM items i WHERE i.sellerUsername = '" + usernamePoster + "'";
+			String str = "SELECT * FROM items i WHERE i.sellerUsername = '" + username + "'";
 			//Run the query against the database.
 			ResultSet result = stmt.executeQuery(str);
 			
 			
-			//Make an HTML table to show the results in:
-			out.print("<table>");
+			%>
 
-			//make a row
-			out.print("<tr>");
-			//make a column
-			out.print("<td>");
-			//print out column header
-			out.print("Item Identification Number");
-			out.print("</td>");
-			//make a column
-			out.print("<td>");
-			out.print("Item Name");
-			out.print("</td>");
-			out.print("</tr>");
+			<table>
 
-			//parse out the results
-			while (result.next()) {
-				//make a row
-				out.print("<tr>");
-				//make a column
-				out.print("<td>");
-				out.print(result.getString("itemId"));
-				out.print("</td>");
-				out.print("<td>");
-				out.print(result.getString("itemName"));
-				out.print("</td>");
-				out.print("</tr>");
+				<tr>
+					<td>Item ID</td>
+					<td>Item Name</td>
+					<td>Item Type</td>
+					<td>Make</td>
+					<td>Model</td>
+					<td>Year</td>
+					<td>Close Date</td>
+				</tr>
+				<%
 
-			}
-			out.print("</table>");
+					while(result.next()) {
+						Auction current = new Auction(result.getInt("itemId"));
 
-			//close the connection.
+						%>
+						
+							<tr>
+								<td><%= current.itemId %></td>
+								<td><%= current.itemName %></td>
+								<td><%= current.itemType %>
+								<td><%= current.make %></td>
+								<td><%= current.model %></td>
+								<td><%= current.year %></td>
+								<td><%= current.closeDate %></td>
+						<%
+					}
+				%>
+			</table>
+		<%
 			con.close();
+
 
 		} catch (Exception e) {
 		}
 	%>
+		<h4>Navigation</h4>
+	<div class="navigation-container"> 
+		<form method="get" action="mainpage.jsp">
+			<input type="submit" value="Go Back to Home Page">
+		</form>
+		<form method="get" action="logout.jsp">
+			<input type="submit" value="Log Out">
+		</form>
+	</div>
+	</CENTER>
 	</body>
 
 </html>

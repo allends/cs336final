@@ -5,14 +5,15 @@ import com.cs336.pkg.ApplicationDB;
 import java.sql.*;
 import java.util.Random;
 
-public class Bid {
+public class Bike {
 	
-	public int bidId;
 	public int itemId;
-	public String bidder;
-	public float bidAmount;
+	public boolean isMountainBike;
+	public boolean hasLights;
+	public int numGears;
+	public String bikeIntendedAge;
 	
-	public Bid(int itemId, String bidder, float bidAmount) {
+	public Bike(int itemId, boolean isMountainBike, boolean hasLights, int numGears, String bikeIntendedAge) {
 		
 		//Get the database connection
 		ApplicationDB db = new ApplicationDB();	
@@ -20,41 +21,28 @@ public class Bid {
 
 		try {
 			//Create a SQL statement
-			Statement stmt = con.createStatement();
-			int bidId = 1;
-			while (true) {
-				Random randInt = new Random();
-				int upperBound = 100000;
-				bidId = bidId * randInt.nextInt(upperBound);
-				stmt = con.createStatement();
-				String str = "SELECT * FROM bids b WHERE b.bidId = '" + bidId + "'";
-				//Run the query against the database.
-				ResultSet result = stmt.executeQuery(str);
-				if (result.next() == false) {
-					break;
-				}
 
-			}
-			
 			//Make an insert statement for the Sells table:
-			String insert = "INSERT INTO bids(bidId,itemId,bidder,amountBid)"
-					+ "VALUES (?, ?, ?, ?)";
+			String insert = "INSERT INTO bikes(itemId,isMountainBike,hasLights,numGears,bikeIntendedAge)"
+					+ "VALUES (?, ?, ?, ?, ?)";
 			
 			//Create the insert statement
 			PreparedStatement ps = con.prepareStatement(insert);
-			ps.setInt(1, bidId);
-			ps.setInt(2, itemId);
-			ps.setString(3, bidder);
-			ps.setFloat(4, bidAmount);
+			ps.setInt(1, itemId);
+			ps.setBoolean(2, isMountainBike);
+			ps.setBoolean(3, hasLights);
+			ps.setInt(4, numGears);
+			ps.setString(5, bikeIntendedAge);
 			
 			// Add the item to the database
 			ps.executeUpdate();
 			
 			// Set the values of this object
-			this.bidId = bidId;
 			this.itemId = itemId;
-			this.bidder = bidder;
-			this.bidAmount = bidAmount;
+			this.isMountainBike = isMountainBike;
+			this.hasLights = hasLights;
+			this.numGears = numGears;
+			this.bikeIntendedAge = bikeIntendedAge;
 			
 		} catch (Exception e) {
 			System.out.println("an error occurred");
@@ -62,7 +50,7 @@ public class Bid {
 		
 	}
 	
-	public Bid(int bidId) {
+	public Bike(int itemId) {
 		//Get the database connection
 		ApplicationDB db = new ApplicationDB();	
 		Connection con = db.getConnection();
@@ -72,15 +60,17 @@ public class Bid {
 			Statement stmt = con.createStatement();
 			
 			//Get the Auction with the associated itemId:
-			String str = "SELECT * FROM bids b WHERE b.bidId = '" + bidId + "'";
+			String str = "SELECT * FROM bikes b WHERE b.itemId = '" + itemId + "'";
 			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 			ResultSet result = stmt.executeQuery(str);
 			
 			while (result.next()) {
-				this.bidId = bidId;
-				this.itemId = result.getInt("itemId");
-				this.bidder = result.getString("bidder");
-				this.bidAmount = result.getFloat("amountBid");
+				this.itemId = itemId;
+				this.isMountainBike = result.getBoolean("isMountainBike");
+				this.hasLights = result.getBoolean("hasLights");
+				this.numGears = result.getInt("numGears");
+				this.bikeIntendedAge = result.getString("bikeIntendedAge");
+
 			}
 			
 		} catch (Exception e) {

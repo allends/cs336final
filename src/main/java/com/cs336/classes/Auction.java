@@ -22,6 +22,7 @@ public class Auction {
 	public String currentBidder;
 	public Date closeDate;
 	public Time closeTime;
+	public boolean isOpen;
 
 	public Auction(String sellerUsername, String itemName, String itemType, float minPrice, float bidIncrement, int numSeats, String make,
 			String model, int year, Date closeDate, Time closeTime) {
@@ -49,8 +50,8 @@ public class Auction {
 			}
 
 			// Make an insert statement for the Sells table:
-			String insert = "INSERT INTO items(itemId,itemName,sellerUsername,itemType,make,model,year,numSeats,minPrice,bidIncrement,closeDate,closeTime,currentBid)"
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
+			String insert = "INSERT INTO items(itemId,itemName,sellerUsername,itemType,make,model,year,numSeats,minPrice,bidIncrement,closeDate,closeTime,currentBid, isOpen)"
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			// Create the insert statement
 			PreparedStatement ps = con.prepareStatement(insert);
@@ -67,6 +68,7 @@ public class Auction {
 			ps.setDate(11, closeDate);
 			ps.setTime(12, closeTime);
 			ps.setFloat(13, 0);
+			ps.setBoolean(14, true);
 
 			// Add the item to the database
 			ps.executeUpdate();
@@ -86,6 +88,7 @@ public class Auction {
 			this.closeTime = closeTime;
 			this.currentBid = 0f;
 			this.currentBidder = "";
+			this.isOpen = true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,6 +127,7 @@ public class Auction {
 				this.currentBid = result.getFloat("currentBid");
 				this.bidIncrement = result.getFloat("bidIncrement");
 				this.currentBidder = result.getString("currentBidder") != null ? result.getString("currentBidder") : "";
+				this.isOpen = result.getBoolean("isOpen");
 			}
 
 		} catch (Exception e) {
@@ -138,7 +142,7 @@ public class Auction {
 		Connection con = db.getConnection();
 
 		try {
-			String highestBid = "SELECT MAX(amountBid) as amountBid, bidder FROM bids b WHERE b.itemId=" + this.itemId + " GROUP BY bidder";
+			String highestBid = "select max(bidAmount) from bids b where b.itemId = '" + this.itemId + "'";
 			Statement stmt = con.createStatement();
 
 			ResultSet result = stmt.executeQuery(highestBid);
@@ -168,8 +172,8 @@ public class Auction {
 				Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
 				return "Success!";
 			}
-
-		} catch (Exception e) {
+		}
+		 catch (Exception e) {
 			e.printStackTrace();
 			return "System error, try again please!";
 		}
@@ -216,7 +220,28 @@ public class Auction {
 	}
 
 	// Return a list of bids for this Auction
-	public void getBids() {
+	public ArrayList<Bid> getBids() {
+		ArrayList<Bid> result = new ArrayList<Bid>();
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+
+		try {
+			// Create a SQL statement
+			Statement stmt = con.createStatement();
+			stmt = con.createStatement();
+			String str = "SELECT * FROM bids b WHERE b.itemId = '" + this.itemId
+					+ "' ORDER BY b.amountBid DESC";
+			// Run the query against the database.
+			ResultSet bids = stmt.executeQuery(str);
+			while (bids.next()) {
+				result.add(new Bid(bids.getInt("bidId")));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("an error occurered");
+		}
+		return result;
+		
 	}
 
 	// Return a list of bids for this Auction
@@ -272,7 +297,9 @@ public class Auction {
 	}
 
 	public void outBidNotifications(String userName) {
-
+		String outBidMessage = "You have been outbid on auction " + this.itemName + "(" + this.itemId + ")!";
+		Alert outBidAlert = new Alert(this.itemId, userName, outBidMessage);
+		
 	}
 
 	public void hello() {

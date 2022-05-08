@@ -13,7 +13,7 @@
 	
 	<body>
 	<body>
-		<% String welcomeStr = "Welcome Customer Representative " + session.getAttribute("user") + "!" ;
+		<% String welcomeStr = "Welcome Customer Representative " + session.getAttribute("username") + "!" ;
 		out.print(welcomeStr);
 		   %>
 		
@@ -28,6 +28,33 @@
 	<p>
 	&ensp;
 	</p>
+	<br>
+	Please enter an account's username to remove an account:
+
+		<form method="get" action="deleteAccount.jsp">
+			<table>
+				<tr>    
+					<td>Username</td><td><input type="text" name="username"></td>
+				</tr>
+			</table>
+			<input type="submit" value="Submit">
+		</form>
+		<p>
+		&ensp;
+		</p>
+			Please enter an account's username, new username, and new password to update an account:
+
+		<form method="get" action="updateAccount.jsp">
+			<table>
+				<tr> <td>Old Username</td><td><input type="text" name="oldUsername"></td></tr>
+					<tr><td>New Username</td><td><input type="text" name="newUsername"></td></tr>
+					<tr><td>New Password</td><td><input type="text" name="newPassword"></td></tr>
+			</table>
+			<input type="submit" value="Submit">
+		</form>
+		<p>
+		&ensp;
+		</p>
 	<br>
 	Please enter an items's identification number to remove an auction:
 

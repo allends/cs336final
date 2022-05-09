@@ -98,43 +98,6 @@
 			<input type="submit" value="Submit to View Alerts">
 		</form>	
 		&ensp;
-	Please select which type of item you want to post for an auction:
-	<br>
-		<form method="post" action="newItemAuction.jsp">
-		<table>
-		<tr>    
-		<td>Item Name</td><td><input type="text" name="itemName"></td>
-		</tr>
-		<tr>    
-		<td>Item Type</td><td><input type="text" name="itemType"></td>
-		</tr>
-		<tr>
-		<td>Make of Vehicle</td><td><input type="text" name="make"></td>
-		</tr>
-		<tr>
-		<td>Model of Vehicle</td><td><input type="text" name="model"></td>
-		</tr>
-		<tr>
-		<td>Year</td><td><input type="text" name="year"></td>
-		</tr>
-		<tr>
-		<td>Number of Seats</td><td><input type="text" name="numSeats"></td>
-		</tr>
-		<tr>
-		<td>Minimum Price</td><td><input type="text" name="minPrice"></td>
-		</tr>
-		<tr>
-		<td>Bid Increment</td><td><input type="text" name="bidIncrement"></td>
-		</tr>
-		<tr>
-		<td>Closing Date</td><td><input type="text" name="closeDate"></td>
-		</tr>
-		<tr>
-		<td>Closing Time</td><td><input type="text" name="closeTime"></td>
-		</tr>
-		</table>
-		<input type="submit" value="Submit to Add Auction">
-		</form>
 	<br>
 		Click the type of item you want to post for an auction:!
 		<form method="get" action="addTruck.jsp">
@@ -189,7 +152,7 @@
 	&ensp;
 	</p>
 	
-	Please enter the username to view that account's bidding information:
+	Please enter the username to view that account's bidding history:
 		<form method="get" action="viewAccountBiddingHistory.jsp">
 			<table>
 				<tr>
@@ -201,8 +164,8 @@
 	<p>
 	&ensp;
 	</p>
-	Click here to view all auctions where you are selling an item!
-		<form method="get" action="viewAccountAuctionPostingHistory.jsp">
+	Click here to view all auctions from a specific user:
+		<form method="get" action="viewAccountPostingHistory.jsp">
 			<table>
 				<tr>
 				<td>Username</td><td><input type="text" name="usernamePoster"></td>
@@ -210,13 +173,9 @@
 			</table>
 			<input type="submit" value="Submit to View History">
 		</form>
-		<form method="get" action="logout.jsp">
-			<table>
-				<tr>    
-			</table>
-			<input type="submit" value="Log Out">
-		</form> 
-	</body>
+		<p>
+	&ensp;
+	</p>
 	<CENTER>
 		<h4>Navigation</h4>
 		<div class="navigation-container">

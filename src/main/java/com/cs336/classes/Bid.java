@@ -45,9 +45,9 @@ public class Bid {
 			ps.setInt(1, bidId);
 			ps.setInt(2, itemId);
 			ps.setString(3, bidder);
-			ps.setFloat(4, bidAmount);
+			ps.setFloat(4, bidAmount); 
 			
-			// Add the item to the database
+			// Add the item to the database 
 			ps.executeUpdate();
 			
 			// Set the values of this object

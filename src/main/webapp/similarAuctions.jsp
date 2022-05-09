@@ -53,35 +53,10 @@ table {
 	For the 4 sub-type categories, the format is (truck,car,bike). The first subcategory shows whether a truck has a truck bed, a car's miles per gallon, or whether a bike is a mountain bike respectively. The second subcategory shows the towing power of a truck, whether a bike has lights, or whether a car is a convertible respectively. The third subcategory shows the truck's miles per gallon, the car's horsepower, or the number of gears in the bike respectively. The final subcategory shows the truck's horsepower, whether the car has navigation, or the intended age of the bike respectively.   
 	<p> &ensp; </p>
 	<%
-		List<String> list = new ArrayList<String>();
-
-		try {
-
-			//Get the database connection
-			ApplicationDB db = new ApplicationDB();	
-			Connection con = db.getConnection();	
-			
-			//Create a SQL statement
-			Statement stmt = con.createStatement();
-			String usernameName = "" + session.getAttribute("username");
-			//Make a SELECT query from the sells table with the price range specified by the 'price' parameter at the index.jsp
-			String sortby = request.getParameter("sortby");
-			String orderby = request.getParameter("orderby");
-			if (sortby == null) {
-				sortby = "currentBid";
-			}
-			if (orderby == null) {
-				orderby = "ASC";
-			}
-			String str = "SELECT * FROM items i WHERE i.sellerUsername != '" + usernameName + "' AND i.isOpen = 1" + " ORDER BY " + sortby + " " + orderby;
-			//Run the query against the database.
-			ResultSet result = stmt.executeQuery(str);
-			
-			
-			%>
-
+		Auction similar = new Auction(Integer.valueOf(request.getParameter("itemId")));
+        ArrayList<Auction> similarList = similar.getSimilar();
+            %>
 			<table>
-
 				<tr>
 					<td>Item ID</td>
 					<td>Item Name</td>
@@ -105,8 +80,7 @@ table {
 				String subCategory2 = "";
 				String subCategory3 = "";
 				String subCategory4= "";
-					while(result.next()) {
-						Auction current = new Auction(result.getInt("itemId"));
+					for (Auction current: similarList) {
 						if (current.itemType.compareTo("truck") == 0) {
 							Truck currentItem = new Truck(current.itemId);
 							subCategory1 = Boolean.toString(currentItem.hasTruckBed);
@@ -159,12 +133,6 @@ table {
 					}
 				%>
 			</table>
-		<%
-			con.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	%>
 	<br>
 	<h4>Navigation</h4>
 	<div class="navigation-container"> 

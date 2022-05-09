@@ -52,6 +52,18 @@
 		<form method="get" action="earningsType.jsp">
 			<input type="submit" value="Earnings by Item Type">
 		</form>
+		<form method="get" action="earningsItem.jsp">
+			<input type="submit" value="Earnings by Item">
+		</form>
+		<form method="get" action="earningsSeller.jsp">
+			<input type="submit" value="Earnings by Seller">
+		</form>
+		<form method="get" action="spendingsBuyer.jsp">
+			<input type="submit" value="Purchases by Buyer">
+		</form>
+		<form method="get" action="bestItems.jsp">
+			<input type="submit" value="Best Selling Items">
+		</form>
 	<br>
 
 </body>

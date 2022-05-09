@@ -36,6 +36,18 @@
 	.reply {
 
 	}
+	.navigation-container {
+		display: flex;
+		flex-direction: column;
+		row-gap: 5px;
+	}
+table, th, td {
+  border: 1px solid black;
+  padding: 5px;
+}
+table {
+  border-spacing: 15px;
+}
 </style>
 </head>
 <body>
@@ -110,6 +122,14 @@
 				}
 			%>
 		</table>
+		<br>
+		<h3>View Similiar Auctions</h3>
+			<form method="get" action="similarAuctions.jsp"> 
+				<input type="text" name="itemId" hidden="true" value="<%= selectedAuction.itemId %>"></td>
+				<td>Similar Auctions</td>
+				<input type="submit" value="Search!">
+			</form>
+		<br>
 		<h3>Comments/Questions</h3>
 
 		<div class="search-bar">
@@ -117,11 +137,6 @@
 			<form method="get" action="questionSearch.jsp"> 
 				<input type="text" name="itemId" hidden="true" value="<%= selectedAuction.itemId %>"></td>
 				<td>Search term</td><td><input type="text" name="searchTerm"></td>
-				<input type="submit" value="Search!">
-			</form>
-			<form method="get" action="similarAuctions.jsp"> 
-				<input type="text" name="itemId" hidden="true" value="<%= selectedAuction.itemId %>"></td>
-				<td>Similar Auctions</td>
 				<input type="submit" value="Search!">
 			</form>
 		</div>

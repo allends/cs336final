@@ -25,34 +25,13 @@ table {
 </head>
 <body>
 		<CENTER>
-			<h1>Auctions</h1>
-		<form name="dropdown" method="get" action="#">
-			<select name="orderby">
-				<option value="ASC" hidden disabled selected>Ascending/descending</option>
-				<option value="ASC">Ascending</option>
-				<option value="DESC">Descending</option>
-			</select>
-			<select name="sortby">
-				<option value="itemName" hidden disabled selected>Order by...</option>
-				<option value="itemName">Name</option>
-				<option value="currentBid">Price</option>
-				<option value="closeDate">Date</option>
-				<option value="itemId">itemId</option>
-			</select>
-			<input type="submit" value="Sort">
-		</form>
-		<h2>Search</h2>
-		<div class="search-bar">
-			<h4>Search for questions/answers: </h4>
-			<form method="get" action="auctionSearch.jsp"> 
-				<td>Search term</td><td><input type="text" name="auctionSearchTerm"></td>
-				<input type="submit" value="Search!">
-			</form>
-		</div>
+			<h1>Simniliar Auctions</h1>
+
 	<p> &ensp; </p>
 	For the 4 sub-type categories, the format is (truck,car,bike). The first subcategory shows whether a truck has a truck bed, a car's miles per gallon, or whether a bike is a mountain bike respectively. The second subcategory shows the towing power of a truck, whether a bike has lights, or whether a car is a convertible respectively. The third subcategory shows the truck's miles per gallon, the car's horsepower, or the number of gears in the bike respectively. The final subcategory shows the truck's horsepower, whether the car has navigation, or the intended age of the bike respectively.   
 	<p> &ensp; </p>
 	<%
+	
 		Auction similar = new Auction(Integer.valueOf(request.getParameter("itemId")));
         ArrayList<Auction> similarList = similar.getSimilar();
             %>

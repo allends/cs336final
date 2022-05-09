@@ -2,7 +2,7 @@ package com.cs336.classes;
 
 import com.cs336.pkg.ApplicationDB;
 import com.cs336.classes.Alert;
-import com.cs366.classes.Bid;
+import com.cs336.classes.Bid;
 import java.sql.*; 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -144,21 +144,21 @@ public class Auction {
 		Connection con = db.getConnection();
 
 		try {
-			String highestBid = "select max(bidAmount) from bids b where b.itemId = '" + this.itemId + "'";
+			String highestBid = "select max(amountBid) as max from bids b where b.itemId = '" + this.itemId + "'";
 			Statement stmt = con.createStatement();
 
 			ResultSet result = stmt.executeQuery(highestBid);
 			if (result.next()) {
-				if (result.getInt("amountBid") < bidAmount) {
+				if (result.getFloat("max") < bidAmount) {
 					// update the entries
 					// update the auction in mysql
 					System.out.println("the bid is valid");
+					this.outBidNotifications(this.currentBidder);
 					this.currentBidder = bidder;
 					this.currentBid = bidAmount;
 					this.updateAuction();
-
+					
 					Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
-					this.outBidNotifications(result.getString("bidder"));
 					return "Success!";
 				} else {
 					// nothing

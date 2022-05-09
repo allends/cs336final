@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
+	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*, com.cs336.classes.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 
@@ -8,29 +8,23 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+<style>
+<style>
+	.navigation-container {
+		display: flex;
+		flex-direction: column;
+		row-gap: 5px;
+	}
+table, th, td {
+  border: 1px solid black;
+  padding: 5px;
+}
+table {
+  border-spacing: 15px;
+}
+</style>
 </head>
-<body>
-	<body>
-		<form method="get" action="mainpage.jsp">
-			<table>
-				<tr>    
-			</table>
-			<input type="submit" value="Go Back to Home Page">
-		</form>
-	</body>
-	<body> 
-	</body>
-	</body>
-	<body>
-		<form method="get" action="logout.jsp">
-			<table>
-				<tr>    
-			</table>
-			<input type="submit" value="Log Out">
-		</form>
-	</body>
-	<body>
-	<p> &ensp; </p>
+
 	
 	<%
 		List<String> list = new ArrayList<String>();
@@ -44,65 +38,44 @@
 			//Create a SQL statement
 			Statement stmt = con.createStatement();
 			String username = "" + session.getAttribute("username");
-			out.print("Alerts to " + username + "!");
+			%>
+			
+			<h1><%="Alerts to " + username + "!"%></h1>
+			
+			<table>
+			<tr>
+				<th>Alert ID </th>
+				<th>Item ID </th>
+				<th>Content</th>
+				<th>Date Posted</th>
+				<th>Time Posted</th>
+			</tr>
+			</table>
+			
+			<% 
 			//Make a SELECT query from the sells table with the price range specified by the 'price' parameter at the index.jsp
 			String str = "SELECT * FROM alerts a WHERE a.username = '" + username + "'";
 			//Run the query against the database.
 			ResultSet result = stmt.executeQuery(str);
-			
-			
-			//Make an HTML table to show the results in:
-			out.print("<table>");
-
-			//make a row
-			out.print("<tr>");
-			//make a column
-			out.print("<td>");
-			//print out column header
-			out.print("Alert Number");
-			out.print("</td>");
-			//make a column
-			out.print("<td>");
-			out.print("Item Id");
-			out.print("</td>");
-			out.print("<td>");
-			out.print("Message");
-			out.print("</td>");
-			out.print("<td>");
-			out.print("Date Issued");
-			out.print("</td>");
-			out.print("<td>");
-			//print out column header
-			out.print("Time Issued");
-			out.print("</td>");
-			//make a column
-			out.print("<td>");
-			out.print("</tr>");
-
-			//parse out the results
 			while (result.next()) {
-				//make a row
-				out.print("<tr>");
-				//make a column
-				out.print("<td>");
-				out.print(result.getString("alertId"));
-				out.print("</td>");
-				out.print("<td>");
-				out.print(result.getString("itemId"));
-				out.print("</td>");
-				out.print("<td>");
-				out.print(result.getString("content"));
-				out.print("</td>");
-				out.print("<td>");
-				out.print(result.getString("datePosted"));
-				out.print("</td>");
-				out.print("<td>");
-				out.print(result.getString("timePosted"));
-				out.print("</td>");
-				out.print("</tr>");
-
-			}
-			out.print("</table>");
+				Alert currentAlert = new Alert(result.getInt("alertId"));
+				
+				%>
+				<table>
+				<tr>
+					<td><%= currentAlert.alertId %></td>
+					<td><%= currentAlert.itemId %></td>
+					<td><%= currentAlert.content %></td>
+					<td><%= currentAlert.datePosted %></td>
+					<td><%= currentAlert.timePosted %></td>
+				</tr>
+			<%
+		}
+	%>
+</table>
+<%
+			
+			
 
 			//close the connection.
 			con.close();
@@ -110,6 +83,16 @@
 		} catch (Exception e) {
 		}
 	%>
-	</body>
-
+	<br>
+	<h4>Navigation</h4>
+	<div class="navigation-container"> 
+		<form method="get" action="mainpage.jsp">
+			<input type="submit" value="Go Back to Home Page">
+		</form>
+		<form method="get" action="logout.jsp">
+			<input type="submit" value="Log Out">
+		</form>
+	</div>
+	</CENTER>
+</body>
 </html>

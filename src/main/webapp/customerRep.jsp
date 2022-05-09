@@ -28,6 +28,22 @@
 	<p>
 	&ensp;
 	</p>
+	<p>
+	&emsp;
+	</p>
+	<body>
+	Click here to view all auctions to view questions!
+		<form method="get" action="viewNonOwnedAuctions.jsp">
+			<table>
+				<tr>    
+			</table>
+			<input type="submit" value="View Auctions">
+		</form>
+	</body>
+	<body>
+	<p>
+	&ensp;
+	</p>
 	<br>
 	Please enter an account's username to remove an account:
 

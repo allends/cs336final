@@ -60,11 +60,7 @@
                     PreparedStatement del = con.prepareStatement(delete);
                     del.setInt(1,itemId);
                     del.executeUpdate();
-                    /* System.out.print("Auction successfully deleted!");                    String auctionClosedMessage = "This auction has been closed without a winner " + itemName + "(" + itemId + ")!";
-            		Alert auctionEndedNotif = new Alert(itemId, winningUsername, auctionClosedMessage);
-            		String unsuccessfulSell = "You have been sold the item in auction " + itemName + "(" + itemId + ")!";
-            		Alert noSellAuction = new Alert(itemId, seller, unsuccessfulSell);
-            		*/
+            		
                 }
 
                 else {
@@ -99,7 +95,6 @@
 			<input type="submit" value="Car">
 		</form>
 		
-	<p>
 	<p>
 	&emsp;
 	</p>

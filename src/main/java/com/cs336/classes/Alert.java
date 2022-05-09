@@ -73,8 +73,38 @@ public class Alert {
 			System.out.println("an error occurered");
 		}
 	}
+		
+		
+	public Alert(int alertId) {
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+
+		try {
+			// Create a SQL statement
+			Statement stmt = con.createStatement();
+
+			// Get the Auction with the associated itemId:
+			String str = "SELECT * FROM alerts a WHERE a.alertId = '" + alertId + "'";
+			// Create a Prepared SQL statement allowing you to introduce the parameters of
+			// the query
+			ResultSet result = stmt.executeQuery(str);
+
+			while (result.next()) {
+				this.alertId = alertId;
+				this.itemId= result.getInt("itemId");
+				this.username = result.getString("username");
+				this.content = result.getString("content");
+				this.datePosted = result.getDate("datePosted");
+				this.timePosted = result.getTime("timePosted");
+			}
+
+		} catch (Exception e) {
+			System.out.println("Couldn't retrieve Auction");
+			e.printStackTrace();
+		}
+	}
+	}
 	
-}
 
 
 

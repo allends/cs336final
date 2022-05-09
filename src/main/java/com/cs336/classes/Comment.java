@@ -102,32 +102,45 @@ public class Comment {
 					break;
 				}
 
+			}stmt = con.createStatement();
+			String str = "SELECT a.accountType FROM accountInfo a WHERE a.username = '" + username + "'";
+			//Run the query against the database.
+			ResultSet result = stmt.executeQuery(str);
+			String accountType = "";
+			while (result.next()) {
+				accountType = result.getString("accountType");
 			}
 			//Make an insert statement for the Sells table:
-			String insert = "INSERT INTO comments (commentId, itemId, repliedTo, username, content, datePosted, timePosted)"
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
+			if (accountType.compareTo("customerRep")==0) {
+				
+				String insert = "INSERT INTO comments (commentId, itemId, repliedTo, username, content, datePosted, timePosted)"
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 			
 			//Create the insert statement
-			PreparedStatement ps = con.prepareStatement(insert);
-			ps.setInt(1, commentId);
-			ps.setInt(2, itemId);
-			ps.setInt(3, repliedTo);
-			ps.setString(4, username);
-			ps.setString(5, content);
-			ps.setDate(6, datePosted);
-			ps.setTime(7, timePosted);
+				PreparedStatement ps = con.prepareStatement(insert);
+				ps.setInt(1, commentId);
+				ps.setInt(2, itemId);
+				ps.setInt(3, repliedTo);
+				ps.setString(4, username);
+				ps.setString(5, content);
+				ps.setDate(6, datePosted);
+				ps.setTime(7, timePosted);
 			
-			// Add the item to the database
-			ps.executeUpdate();
+				// Add the item to the database
+				ps.executeUpdate();
 			
 			// Set the values of this object
-			this.itemId = itemId;
-			this.username = username;
-			this.content = content;
-			this.datePosted = datePosted;
-			this.timePosted = timePosted;
-			this.commentId = commentId;
-			this.repliedTo = repliedTo;
+				this.itemId = itemId;
+				this.username = username;
+				this.content = content;
+				this.datePosted = datePosted;
+				this.timePosted = timePosted;
+				this.commentId = commentId;
+				this.repliedTo = repliedTo;
+			}
+			else {
+				System.out.println("Invalid account type");
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

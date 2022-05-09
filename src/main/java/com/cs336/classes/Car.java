@@ -43,7 +43,7 @@ public class Car {
 			this.hasNavigation = hasNavigation;
 			this.mpg = mpg;
 			this.horsepower = horsepower;
-			
+			con.close();
 		} catch (Exception e) {
 			System.out.println("an error occurred");
 		}
@@ -72,7 +72,7 @@ public class Car {
 				this.hasNavigation = result.getBoolean("hasNavigation");
 
 			}
-			
+			con.close();
 		} catch (Exception e) {
 			System.out.println("an error occurered");
 		}

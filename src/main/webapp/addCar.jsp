@@ -19,7 +19,7 @@
 <body>
 	<CENTER>
 		<h1>
-			<% String welcomeStr = "Post a bicycle for auction, " + session.getAttribute("username") + "!" ;
+			<% String welcomeStr = "Post a car for auction, " + session.getAttribute("username") + "!" ;
 			out.print(welcomeStr);
 				 %> 
 		</h1>

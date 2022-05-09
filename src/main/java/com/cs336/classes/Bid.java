@@ -55,7 +55,7 @@ public class Bid {
 			this.itemId = itemId;
 			this.bidder = bidder;
 			this.bidAmount = bidAmount;
-			
+			con.close();
 		} catch (Exception e) {
 			System.out.println("an error occurred");
 		}
@@ -82,7 +82,7 @@ public class Bid {
 				this.bidder = result.getString("bidder");
 				this.bidAmount = result.getFloat("amountBid");
 			}
-			
+			con.close();
 		} catch (Exception e) {
 			System.out.println("an error occurered");
 		}

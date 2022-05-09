@@ -49,15 +49,9 @@
         	java.time.LocalDate closeDate = java.time.LocalDate.parse(closeDateS);
         	String closeTimeS = result.getTime("closeTime").toString();
         	java.time.LocalTime closeTime = java.time.LocalTime.parse(closeTimeS, t);
-        	out.println(closeTime.toString());
     		Float currentBid = result.getFloat("currentBid");
     		Float minPrice = result.getFloat("minPrice");
     		
-    		
-    		out.println(closeDate);
-    		out.println(closeTime + "<br>");
-    		out.println((today.compareTo(closeDate)));
-    		out.println(now.compareTo(closeTime) + "<br><br>");
     		
             if (today.compareTo(closeDate) > 0 || today.compareTo(closeDate) == 0 && now.compareTo(closeTime) > 0) {
                 PreparedStatement close = con.prepareStatement(

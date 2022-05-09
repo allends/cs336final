@@ -70,7 +70,7 @@ public class Comment {
 			this.datePosted = datePosted;
 			this.timePosted = timePosted;
 			this.commentId = commentId;
-			
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("There was a problem creating the comment");
@@ -141,7 +141,7 @@ public class Comment {
 			else {
 				System.out.println("Invalid account type");
 			}
-			
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("There was a problem creating the comment");
@@ -168,7 +168,7 @@ public class Comment {
 				this.timePosted = comment.getTime("timePosted");
 				this.commentId = commentId;
 			}
-			
+			con.close();
 		} catch (Exception e) {
 			System.out.println("There was a problem retrieving the comment");
 		}
@@ -190,7 +190,7 @@ public class Comment {
 			while (comment.next()) {
 				results.add(new Comment(comment.getInt("commentId")));
 			}
-			
+			con.close();
 		} catch (Exception e) {
 			System.out.println("There was a problem retrieving the comment");
 		}

@@ -43,7 +43,7 @@ public class Truck {
 			this.towingPower = towingPower;
 			this.mpg = mpg;
 			this.horsepower = horsepower;
-			
+			con.close();
 		} catch (Exception e) {
 			System.out.println("an error occurred");
 		}
@@ -72,7 +72,7 @@ public class Truck {
 				this.horsepower = result.getFloat("horsepower");
 
 			}
-			
+			con.close();
 		} catch (Exception e) {
 			System.out.println("an error occurered");
 		}

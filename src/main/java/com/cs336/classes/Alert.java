@@ -60,6 +60,7 @@ public class Alert {
 			
 			// Add the item to the database
 			ps.executeUpdate();
+			ps.close();
 			
 			// Set the values of this object
 			this.itemId = itemId;
@@ -67,7 +68,7 @@ public class Alert {
 			this.content = content;
 			this.datePosted = datePosted;
 			this.timePosted = timePosted;
-			
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("an error occurered");
@@ -97,6 +98,7 @@ public class Alert {
 				this.datePosted = result.getDate("datePosted");
 				this.timePosted = result.getTime("timePosted");
 			}
+			con.close();
 
 		} catch (Exception e) {
 			System.out.println("Couldn't retrieve Auction");

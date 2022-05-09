@@ -31,6 +31,7 @@ public class Report {
 				String item[] = {Integer.toString(auction.getInt("year")) + " " + auction.getString("make") + " " + auction.getString("model"), Float.toString(auction.getFloat("currentBid"))};
 				result.add(item);
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("An error occurred");
@@ -78,6 +79,7 @@ public class Report {
 				String bikeArr[] = {"Bike", bikeType.getString(1)};
 				result.add(bikeArr);
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("An error occurred");
@@ -116,6 +118,7 @@ public class Report {
 				String temp[] = {res.getString(1), res.getString(2)};
 				result.add(temp);
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("An error occurred");
@@ -151,6 +154,7 @@ public class Report {
 				String temp[] = {res.getString(1), res.getString(2)};
 				result.add(temp);
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("An error occurred");
@@ -185,6 +189,7 @@ public class Report {
 				String temp[] = {res.getString(1), res.getString(2)};
 				result.add(temp);
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("An error occurred");
@@ -222,6 +227,7 @@ public class Report {
 				String temp[] = {res.getString(1), res.getString(2)};
 				result.add(temp);
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("An error occurred");

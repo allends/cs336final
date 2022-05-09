@@ -91,7 +91,7 @@ public class Auction {
 			this.currentBid = 0f;
 			this.currentBidder = "";
 			this.isOpen = true;
-
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Coun't create Auction");
@@ -131,7 +131,7 @@ public class Auction {
 				this.currentBidder = result.getString("currentBidder") != null ? result.getString("currentBidder") : "";
 				this.isOpen = result.getBoolean("isOpen");
 			}
-
+			con.close();
 		} catch (Exception e) {
 			System.out.println("Couldn't retrieve Auction");
 			e.printStackTrace();
@@ -159,11 +159,15 @@ public class Auction {
 					this.updateAuction();
 					
 					Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
+					con.close();
 					return "Success!";
+					
 				} else {
 					// nothing
 					System.out.println("the bid is not high enough");
+					con.close();
 					return "Bid not high enough!";
+					
 				}
 			} else {
 				System.out.println("no bidder, youre the highest!");
@@ -172,9 +176,12 @@ public class Auction {
 				this.updateAuction();
 
 				Bid newHighestBid = new Bid(this.itemId, bidder, bidAmount);
+				con.close();
 				return "Success!";
 			}
+			
 		}
+	
 		 catch (Exception e) {
 			e.printStackTrace();
 			return "System error, try again please!";
@@ -191,6 +198,7 @@ public class Auction {
 			ps.setFloat(2, this.currentBid);
 			ps.setInt(3, this.itemId);
 			ps.executeUpdate();
+			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -238,6 +246,7 @@ public class Auction {
 			while (bids.next()) {
 				result.add(new Bid(bids.getInt("bidId")));
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("an error occurered");
@@ -265,6 +274,7 @@ public class Auction {
 			while (comments.next()) {
 				result.add(new Comment(comments.getInt("commentId")));
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("an error occurered");
@@ -291,6 +301,7 @@ public class Auction {
 			while (comments.next()) {
 				result.add(new Comment(comments.getInt("commentId")));
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("an error occurered");
@@ -326,6 +337,7 @@ public class Auction {
 			while (comments.next()) {
 				result.add(new Auction(comments.getInt("itemId")));
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("an error occurered");

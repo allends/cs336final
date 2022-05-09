@@ -43,7 +43,7 @@ public class Bike {
 			this.hasLights = hasLights;
 			this.numGears = numGears;
 			this.bikeIntendedAge = bikeIntendedAge;
-			
+			con.close();
 		} catch (Exception e) {
 			System.out.println("an error occurred");
 		}
@@ -72,7 +72,7 @@ public class Bike {
 				this.bikeIntendedAge = result.getString("bikeIntendedAge");
 
 			}
-			
+			con.close();
 		} catch (Exception e) {
 			System.out.println("an error occurered");
 		}

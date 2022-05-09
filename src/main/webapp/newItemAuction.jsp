@@ -2,7 +2,7 @@
 	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*, com.cs336.classes.*"%>
 <!--Import some libraries that have classes that we need -->
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
-<%@ page import="javax.servlet.http.*,javax.servlet.*"%>
+<%@ page import="javax.servlet.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -52,10 +52,8 @@
 		}
 		String usernameName = "" + session.getAttribute("username");
 		Auction new_auction = new Auction(usernameName, newItemName, newItemType, minPrice, bidIncrement, numSeats, newMakeOfVehicle, newModelOfVehicle, year, closeDate, closeTime);
-		out.print("1");
 		int itemId = new_auction.itemId;
 		if (new_auction.itemType.compareTo("truck") == 0) {
-			out.print("3");
 			Truck new_truck = new Truck(itemId, hasTruckBed, towingPower, mpg, horsepower);
 		}
 		else if (new_auction.itemType.compareTo("car") == 0) {
@@ -64,6 +62,7 @@
 		else if (new_auction.itemType.compareTo("bike") == 0){
 			Bike new_bike = new Bike(itemId, isMountainBike, hasLights, numGears, bikeIntendedAge);
 		}
+		out.print("Your posting was successful!");
 	%>
 	<p>
 	&ensp;

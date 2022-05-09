@@ -33,8 +33,8 @@ bidIncrement float,
 isOpen boolean,
 fulltext(itemName, itemType),
 primary key (itemId),
-foreign key (sellerUsername) references accountInfo(username) ON DELETE CASCADE,
-foreign key (currentBidder) references accountInfo(username) ON DELETE CASCADE);
+foreign key (sellerUsername) references accountInfo(username) ON UPDATE CASCADE ON DELETE CASCADE,
+foreign key (currentBidder) references accountInfo(username) ON UPDATE CASCADE ON DELETE CASCADE);
 
 create table bids(
 bidId int,
@@ -43,7 +43,7 @@ bidder varchar(30),
 amountBid float,
 primary key(bidId),
 foreign key (itemId) references items(itemId) ON DELETE CASCADE,
-foreign key (bidder) references accountInfo(username) ON DELETE CASCADE);
+foreign key (bidder) references accountInfo(username) ON UPDATE CASCADE ON DELETE CASCADE);
 
 create table comments(
 commentId int,
@@ -56,7 +56,7 @@ timePosted time,
 fulltext(content),
 primary key(commentId),
 foreign key (itemId) references items(itemId) ON DELETE CASCADE,
-foreign key (username) references accountInfo(username) ON DELETE CASCADE); 
+foreign key (username) references accountInfo(username) ON UPDATE CASCADE ON DELETE CASCADE); 
 
 create table alerts(
 alertId int,
@@ -67,7 +67,7 @@ datePosted date,
 timePosted time,
 primary key(alertId),
 foreign key (itemId) references items(itemId) ON DELETE CASCADE,
-foreign key (username) references accountInfo(username) ON DELETE CASCADE);
+foreign key (username) references accountInfo(username) ON UPDATE CASCADE ON DELETE CASCADE);
 
 create table trucks(
 itemId int,
